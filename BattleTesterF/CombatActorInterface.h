@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 
 #include "CombatTypesEnum.h"
@@ -8,7 +9,7 @@ using namespace std;
 class CombatActorInterface {
 private:
 	const float HP_MULTIPLIER = 2.5f;
-	const float MANA_MULTIPLIER = 3.0f;
+	const float MANA_MULTIPLIER = 2.5f;
 	const float SPEED_MULTIPLIER = 0.5f;
 	const float EVASION_MULTIPLIER = 0.5f;
 	const float STAMINA_MULTIPLIER = 0.25f;
@@ -19,7 +20,7 @@ private:
 	const float MEELE_DEFENSE_MULTIPLIER = 0.5f;
 	const float MAGIC_DEFENSE_MULTIPLIER = 0.5f;
 
-	int totalStatusFormula(int baseStatus, int multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
+	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, string debugMessage = "");
 protected:
 
 public:
