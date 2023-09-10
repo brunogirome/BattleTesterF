@@ -5,6 +5,13 @@ Database::Database()
     loadHeroesFromDatabase();
 }
 
+Hero Database::getAHero(int id)
+{
+    const Hero findHero = Heroes[id];
+
+    return findHero;
+}
+
 void Database::listHeroes()
 {
     cout << "+---------------------------+" << endl;

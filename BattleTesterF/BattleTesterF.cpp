@@ -13,5 +13,9 @@ int main()
 
     GlobalDatabase->listHeroes();
 
+    const Hero hero1 = GlobalDatabase->getAHero(0);
+
+    cout << hero1.Name << endl;
+
     cout << "Hello World!\n";
 }
