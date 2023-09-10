@@ -22,4 +22,8 @@ int CombatActorInterface::totalStatusFormula(int baseStatus, int multiplier, int
 
 	return (int)(baseStatus + ((multiplier * combatStatusValue) * bonus));
 }
+
+void CombatActorInterface::initiateBaseValues() {
+
+}
 	

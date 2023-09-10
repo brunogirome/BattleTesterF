@@ -24,6 +24,8 @@ private:
 protected:
 	int totalStatusFormula(int baseStatus, int multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
 
+	void initiateBaseValues();
+
 public:
 	// General Status
 	int Id;

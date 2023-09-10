@@ -3,7 +3,14 @@
 
 #include <iostream>
 
+#include "DatabaseManager.h"
+
+using namespace std;
+
 int main()
 {
-    std::cout << "Hello World!\n";
+    getHeroes();
+    //stringstream query << "SELECT * FROM Heroes;";
+
+    cout << "Hello World!\n";
 }

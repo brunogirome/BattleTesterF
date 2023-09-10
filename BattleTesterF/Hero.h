@@ -4,6 +4,6 @@
 
 class Hero: public CombatActorInterface {
 public:
-	int test = HP_MULTIPLIER + 10;
+	//int test = HP_MULTIPLIER + 10;
 
 };

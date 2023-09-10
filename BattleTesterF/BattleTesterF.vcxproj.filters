@@ -13,10 +13,57 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{17d723be-61ce-42b1-aa76-82003bb93071}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Interfaces">
+      <UniqueIdentifier>{bedb2506-f565-404f-8088-17ae57dd9313}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Enums">
+      <UniqueIdentifier>{702a9912-31c4-4235-ad0e-f721b7dfd174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Database">
+      <UniqueIdentifier>{7c2c8967-9ccd-4813-a43d-0ef8203270a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BattleTesterF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CombatActorInterface.h">
+      <Filter>Source Files\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatTypesEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="ElementsEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatActorInterface.cpp">
+      <Filter>Source Files\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroDatabase.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\lnpc\Downloads\sqlite-amalgamation-3430000\sqlite-amalgamation-3430000\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseManager.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Hero.h">
+      <Filter>Source Files\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseManager.h">
+      <Filter>Source Files\Database</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
