@@ -3,14 +3,15 @@
 
 #include <iostream>
 
-#include "DatabaseManager.h"
+#include "Database.h"
 
 using namespace std;
 
 int main()
 {
-    getHeroes();
-    //stringstream query << "SELECT * FROM Heroes;";
+    Database* GlobalDatabase = new Database();
+
+    GlobalDatabase->listHeroes();
 
     cout << "Hello World!\n";
 }

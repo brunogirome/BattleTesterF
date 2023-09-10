@@ -7,4 +7,6 @@
 
 using namespace std;
 
-bool getHeroes();
+sqlite3* connect();
+
+void disconnect(sqlite3_stmt* statement);

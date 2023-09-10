@@ -45,13 +45,13 @@
     <ClCompile Include="CombatActorInterface.cpp">
       <Filter>Source Files\Interfaces</Filter>
     </ClCompile>
-    <ClCompile Include="HeroDatabase.cpp">
-      <Filter>Source Files\Database</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\lnpc\Downloads\sqlite-amalgamation-3430000\sqlite-amalgamation-3430000\sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DatabaseManager.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Database.cpp">
       <Filter>Source Files\Database</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +60,9 @@
       <Filter>Source Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseManager.h">
+      <Filter>Source Files\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database.h">
       <Filter>Source Files\Database</Filter>
     </ClInclude>
   </ItemGroup>

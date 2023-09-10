@@ -132,12 +132,13 @@
     <ClCompile Include="CombatActorInterface.h" />
     <ClCompile Include="BattleTesterF.cpp" />
     <ClCompile Include="CombatTypesEnum.h" />
+    <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="ElementsEnum.h" />
     <ClCompile Include="Hero.cpp" />
-    <ClCompile Include="HeroDatabase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="Hero.h" />
   </ItemGroup>
