@@ -1,6 +1,6 @@
 #include "CombatActorInterface.h"
 
-CombatActorInterface::CombatActorInterface() {
+void CombatActorInterface::initializeTotals() {
 	// Setting basic status
 	HpTotal = totalStatusFormula(HpBase, HP_MULTIPLIER, Strength, TYPE_STRENGTH);
 	ManaTotal = totalStatusFormula(ManaBase, MANA_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
@@ -21,9 +21,5 @@ int CombatActorInterface::totalStatusFormula(int baseStatus, int multiplier, int
 	const int bonus = CombatType == combatStatusBonus ? 2 : 1;
 
 	return (int)(baseStatus + ((multiplier * combatStatusValue) * bonus));
-}
-
-void CombatActorInterface::initiateBaseValues() {
-
 }
 	

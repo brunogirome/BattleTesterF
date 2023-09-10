@@ -19,14 +19,12 @@ private:
 	const float MEELE_DEFENSE_MULTIPLIER = 0.5f;
 	const float MAGIC_DEFENSE_MULTIPLIER = 0.5f;
 
-	CombatActorInterface();
-
-protected:
 	int totalStatusFormula(int baseStatus, int multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
-
-	void initiateBaseValues();
+protected:
 
 public:
+	void initializeTotals();
+
 	// General Status
 	int Id;
 	string Name;

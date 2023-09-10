@@ -4,15 +4,15 @@
 
 #include "DatabaseManager.h"
 
-//#include "Hero.h"
+#include "Hero.h"
 
 class Database {
 public:
 	Database();
 
-	std::vector<string> Heroes;
+	vector<Hero> Heroes;
 
-	//Hero getAHero(int id);
+	Hero getAHero(int id);
 
 	void listHeroes();
 private:
