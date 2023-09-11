@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 
@@ -21,7 +23,6 @@ private:
 	const float MAGIC_DEFENSE_MULTIPLIER = 0.5f;
 
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, string debugMessage = "");
-protected:
 
 public:
 	void initializeTotals();
@@ -63,8 +64,8 @@ public:
 	int MeeleDefenseTotal;
 	int MagicDefenseTotal;
 
-	// StatusCalculation
-	
+	int HpCurrent;
+	int ManaCurrent;
 
 	// Other attributes
 	// int SpellsId[];

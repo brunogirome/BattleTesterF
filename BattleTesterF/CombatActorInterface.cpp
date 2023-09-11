@@ -16,6 +16,9 @@ void CombatActorInterface::initializeTotals() {
 	// Setting defense satus
 	MeeleDefenseTotal = totalStatusFormula(MeeleDefenseBase, MEELE_DEFENSE_MULTIPLIER, Strength, TYPE_STRENGTH);
 	MagicDefenseTotal = totalStatusFormula(MagicDefenseBase, MAGIC_DEFENSE_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
+
+	HpCurrent = this->HpTotal;
+	ManaCurrent = this->ManaTotal;
 }
 
 int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, string debugMessage) {

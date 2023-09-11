@@ -4,6 +4,10 @@ Game::Game()
 {
 	this->database = new Database();
 
+	database->listHeroes();
+
+	database->listEnemies();
+
 }
 
 void Game::init()

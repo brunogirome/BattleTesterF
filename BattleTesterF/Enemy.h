@@ -2,9 +2,9 @@
 
 #include "CombatActorInterface.h"
 
-class Hero: public CombatActorInterface {
+class Enemy : public CombatActorInterface {
 public:
-	Hero(int id, string name, CombatTypesEnum combatType, ElementsEnum element,
+	Enemy(int id, string name, CombatTypesEnum combatType, ElementsEnum element,
 		int strength, int agility, int intelligence,
 		int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase,
 		int meelePowerBase, int magicPowerBase,
