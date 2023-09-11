@@ -3,19 +3,25 @@
 
 #include <iostream>
 
-#include "Database.h"
+#include "Game.h"
 
 using namespace std;
 
 int main()
 {
-    Database* GlobalDatabase = new Database();
+    Game* game = new Game();
 
-    GlobalDatabase->listHeroes();
+    game->init();
+    
+    Party* party;
+    
+    party = game->party;
 
-    const Hero hero1 = GlobalDatabase->getAHero(0);
+    party->addToParty(3);
 
-    cout << hero1.Name << endl;
+    for (int i = 0; i < party->partyMembers.size(); i++) {
+        cout << party->partyMembers[i].Name << endl;
+    }
 
     cout << "Hello World!\n";
 }

@@ -25,19 +25,13 @@
     <Filter Include="Source Files\Database">
       <UniqueIdentifier>{7c2c8967-9ccd-4813-a43d-0ef8203270a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GameState">
+      <UniqueIdentifier>{af436d08-79a8-4f3b-ae2f-7bf72b82427c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BattleTesterF.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CombatActorInterface.h">
-      <Filter>Source Files\Interfaces</Filter>
-    </ClCompile>
-    <ClCompile Include="CombatTypesEnum.h">
-      <Filter>Source Files\Enums</Filter>
-    </ClCompile>
-    <ClCompile Include="ElementsEnum.h">
-      <Filter>Source Files\Enums</Filter>
     </ClCompile>
     <ClCompile Include="Hero.cpp">
       <Filter>Source Files\Models</Filter>
@@ -54,16 +48,37 @@
     <ClCompile Include="Database.cpp">
       <Filter>Source Files\Database</Filter>
     </ClCompile>
+    <ClCompile Include="Party.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatTypesEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="ElementsEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="CombatActorInterface.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Hero.h">
-      <Filter>Source Files\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="DatabaseManager.h">
-      <Filter>Source Files\Database</Filter>
+    <ClInclude Include="Party.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Database.h">
-      <Filter>Source Files\Database</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

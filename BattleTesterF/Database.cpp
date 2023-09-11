@@ -7,7 +7,7 @@ Database::Database()
 
 Hero Database::getAHero(int id)
 {
-    const Hero findHero = Heroes[id];
+    const Hero findHero = Heroes[id - 1];
 
     return findHero;
 }

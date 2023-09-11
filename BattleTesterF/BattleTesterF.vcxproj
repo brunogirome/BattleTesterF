@@ -135,12 +135,16 @@
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="ElementsEnum.h" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hero.cpp" />
+    <ClCompile Include="Party.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseManager.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />
+    <ClInclude Include="Party.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
