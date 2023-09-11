@@ -13,7 +13,7 @@ int main()
 
     game->init();
     
-    game->GameDatabase->listHeroes();
+    /*game->GameDatabase->listHeroes();
     
     system("pause");
 
@@ -23,9 +23,9 @@ int main()
 
     system("pause");
 
-    system("cls");
+    system("cls");*/
 
-    Battle* firstBattle = new Battle(game, {1, 1, 1, 1, 1});
+    Battle* firstBattle = new Battle(game, {1, 1, 1, 1});
 
     firstBattle->battleStart();
 
