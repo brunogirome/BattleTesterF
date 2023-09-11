@@ -29,7 +29,7 @@ void Battle::battleStart()
 
 	cout << battleStartHeader;
 
-	this_thread::sleep_for(chrono::seconds(3));
+	this_thread::sleep_for(chrono::seconds(1));
 
 	system("cls");
 
@@ -74,6 +74,8 @@ void Battle::battleInterface()
 
 	cout << uiLines;
 
+	vector<tempSpeedActor> actorSpeedOrder = sortAttackOrder();
+
 	system("pause");
 }
 
@@ -109,4 +111,56 @@ void Battle::drawLine(int size, bool border) {
 	line += "\n";
 
 	cout << line;
+}
+
+vector<Battle::tempSpeedActor> Battle::sortAttackOrder()
+{
+	vector<tempSpeedActor> actorSpeedOrder;
+
+	for (int i = 0; i < party->PartyMembers.size(); i++) {
+		Hero currentHero = party->PartyMembers[i];
+
+		actorSpeedOrder.emplace_back(i, currentHero.SpeedTotal, typeOfActorEnum::hero);
+	}
+
+	for (int i = 0; i < enemyParty.size(); i++) {
+		Enemy currentEnemy = enemyParty[i];
+
+		actorSpeedOrder.emplace_back(i, currentEnemy.SpeedTotal, typeOfActorEnum::enemy);
+	}
+
+	int actorSpeedSizes = actorSpeedOrder.size(), i, j;
+
+	bool swaped = false;
+
+	for (i = 0; i < actorSpeedSizes - 1; i++) {
+		swaped = false;
+
+		for (j = 0;  j < actorSpeedSizes - i - 1; j++) {
+			if (actorSpeedOrder[j].Speed < actorSpeedOrder[j + 1].Speed) {
+				swap(actorSpeedOrder[j], actorSpeedOrder[j + 1]);
+
+				swaped = true;
+			}
+		}
+
+		if (!swaped) {
+			break;
+		}
+	}
+
+	cout << "speed debug" << endl;
+
+	for (i = 0; i < actorSpeedSizes; i++) {
+		cout << "Position: " << actorSpeedOrder[i].Position << ", speed: " << actorSpeedOrder[i].Speed << ", type: " << ((actorSpeedOrder[i].TypeOfActor == typeOfActorEnum::hero) ? "hero" : "enemy") << endl;
+	}
+
+	return actorSpeedOrder;
+}
+
+Battle::tempSpeedActor::tempSpeedActor(int position, int speed, typeOfActorEnum typeOfActor)
+{
+	this->Position = position;
+	this->Speed = speed;
+	this->TypeOfActor = typeOfActor;
 }
