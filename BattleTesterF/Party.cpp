@@ -1,11 +1,11 @@
 #include "Party.h"
 
-Party::Party(vector<int> idHeroes, Database* gameDatabase)
+Party::Party(vector<int> idHeroes, Database* database)
 {
-	this->database = gameDatabase;
+	this->database = database;
 
 	for (int i = 0; i < idHeroes.size(); i++) {
-		this->partyMembers.push_back(database->getAHero(idHeroes[i]));
+		this->PartyMembers.push_back(database->getAHero(idHeroes[i]));
 	}
 }
 
@@ -13,5 +13,5 @@ void Party::addToParty(int heroId)
 {
 	Hero findHero = database->getAHero(heroId);
 
-	partyMembers.push_back(findHero);
+	PartyMembers.push_back(findHero);
 }

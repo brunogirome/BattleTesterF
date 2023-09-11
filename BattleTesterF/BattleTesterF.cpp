@@ -1,22 +1,33 @@
 #include <iostream>
 
 #include "Game.h"
+#include "Battle.h"
 
 using namespace std;
 
 int main()
 {
+    string input;
+
     Game* game = new Game();
 
     game->init();
     
-    Party* party;
+    game->GameDatabase->listHeroes();
     
-    party = game->party;
+    system("pause");
 
-    for (int i = 0; i < party->partyMembers.size(); i++) {
-        cout << party->partyMembers[i].Name << endl;
-    }
+    system("cls");
+
+    game->GameDatabase->listEnemies();
+
+    system("pause");
+
+    system("cls");
+
+    Battle* firstBattle = new Battle(game, {1, 1, 1, 1, 1});
+
+    firstBattle->battleStart();
 
     cout << "Hello World!\n";
 }

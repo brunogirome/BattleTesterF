@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Battle.cpp" />
     <ClCompile Include="C:\Users\lnpc\Downloads\sqlite-amalgamation-3430000\sqlite-amalgamation-3430000\sqlite3.c" />
     <ClCompile Include="CombatActorInterface.cpp" />
     <ClCompile Include="CombatActorInterface.h" />
@@ -136,14 +137,17 @@
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="ElementsEnum.h" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyParty.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Party.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Battle.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyParty.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Party.h" />

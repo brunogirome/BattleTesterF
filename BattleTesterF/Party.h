@@ -1,21 +1,18 @@
 #pragma once
 
-#include <vector>
-
-#include "Hero.h"
 #include "Database.h"
 
 class Party
 {
 private:
-	Database* database;
-
 	int getHeroPosition();
 
-public: 
-	vector<Hero> partyMembers;
+	Database* database;
 
-	Party(vector<int> idHeroes, Database* gameDatabase);
+public: 
+	vector<Hero> PartyMembers;
+
+	Party(vector<int> idHeroes, Database* database);
 
 	void addToParty(int heroId);
 

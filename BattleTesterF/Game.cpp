@@ -2,15 +2,16 @@
 
 Game::Game()
 {
-	this->database = new Database();
+	this->GameDatabase = new Database();
+	
+	//this->GameDatabase->listHeroes();
 
-	database->listHeroes();
-
-	database->listEnemies();
+	//this->GameDatabase->listEnemies();
 
 }
 
 void Game::init()
 {
-	this->party = new Party({ 1, 2, 3 }, database);
+	this->GameParty = new Party({ 1, 2, 3 }, GameDatabase);
 }
+	

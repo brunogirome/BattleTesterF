@@ -1,19 +1,21 @@
 #pragma once
 
+#include<windows.h>
+#include <chrono>
+#include <thread>
+
 #include "Party.h"
+#include "Database.h"
 
 class Game
 {
-private:
-
-	Database* database;
 public:
-	Party* party;
+	Party * GameParty;
+
+	Database* GameDatabase;
 
 	Game();
 
 	void init();
-
-	void end();
 };
 
