@@ -35,7 +35,22 @@ void Battle::start()
 
 	cout << "Combat started!" << endl;
 
-	loop();
+	string finalMessage;
+
+	if (loop()) {
+		finalMessage = "You win";
+	}
+	else {
+		finalMessage = "You loose!";
+	}
+
+	this_thread::sleep_for(chrono::seconds(1));
+
+	system("cls");
+
+	cout << endl << endl << "\t\t" << finalMessage;
+
+	this_thread::sleep_for(chrono::seconds(1));
 }
 
 void Battle::printBattle()
@@ -99,7 +114,7 @@ bool Battle::loop()
 
 		deadHeroes = 0;
 
-		attackerPointer = attackerPointer > roudSize ? 0 : attackerPointer;
+		attackerPointer = attackerPointer >= roudSize ? 0 : attackerPointer;
 
 		// Checking if player won or lost the battle
 		for (int i = 0; i < attackOrder.size(); i++) {
