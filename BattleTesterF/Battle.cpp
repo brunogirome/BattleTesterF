@@ -74,7 +74,7 @@ void Battle::battleInterface()
 
 	cout << uiLines;
 
-	vector<tempSpeedActor> actorSpeedOrder = sortAttackOrder();
+	vector<actorAttackOrder> actorSpeedOrder = sortAttackOrder();
 
 	system("pause");
 }
@@ -113,9 +113,9 @@ void Battle::drawLine(int size, bool border) {
 	cout << line;
 }
 
-vector<Battle::tempSpeedActor> Battle::sortAttackOrder()
+vector<Battle::actorAttackOrder> Battle::sortAttackOrder()
 {
-	vector<tempSpeedActor> actorSpeedOrder;
+	vector<actorAttackOrder> actorSpeedOrder;
 
 	for (int i = 0; i < party->PartyMembers.size(); i++) {
 		Hero currentHero = party->PartyMembers[i];
@@ -158,7 +158,7 @@ vector<Battle::tempSpeedActor> Battle::sortAttackOrder()
 	return actorSpeedOrder;
 }
 
-Battle::tempSpeedActor::tempSpeedActor(int position, int speed, typeOfActorEnum typeOfActor)
+Battle::actorAttackOrder::actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor)
 {
 	this->Position = position;
 	this->Speed = speed;

@@ -16,16 +16,16 @@ private:
 
 	void drawLine(int size, bool border = false);
 
-	class tempSpeedActor {
+	class actorAttackOrder {
 	public:
 		int Position;
 		int Speed;
 		typeOfActorEnum TypeOfActor;
 
-		tempSpeedActor(int position, int speed, typeOfActorEnum typeOfActor);
+		actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor);
 	};
 
-	vector<tempSpeedActor> sortAttackOrder();
+	vector<actorAttackOrder> sortAttackOrder();
 
 public:
 	Battle(Game* game, vector<int> enemyPartyIds);
