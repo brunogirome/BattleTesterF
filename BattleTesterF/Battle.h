@@ -8,30 +8,38 @@ enum class typeOfActorEnum { hero, enemy };
 class Battle
 {
 private:
-	Party* party;
-
-	vector<Enemy> enemyParty;
-
-	string getLine(int size, string character = "-");
-
-	void drawLine(int size, bool border = false);
-
 	class actorAttackOrder {
 	public:
 		int Position;
 		int Speed;
+		bool IsDead;
 		typeOfActorEnum TypeOfActor;
 
-		actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor);
+		actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor, bool isDead);
 	};
 
-	vector<actorAttackOrder> sortAttackOrder();
+	Party* party;
 
+	vector<Enemy> enemyParty;
+
+	vector<actorAttackOrder> attackOrder;
+
+	int currentRound;
+
+	string getLine(int size, string character = "-");
+
+	bool loop();
+
+	void drawLine(int size, bool border = false);
+
+	void sortAttackOrder();
+
+	void selectAction(int attackerPosition);
+
+	void printBattle();
 public:
 	Battle(Game* game, vector<int> enemyPartyIds);
 
-	void battleStart();
-
-	void battleInterface();
+	void start();
 };
 

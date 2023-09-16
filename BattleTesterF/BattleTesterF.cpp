@@ -27,7 +27,7 @@ int main()
 
     Battle* firstBattle = new Battle(game, {1, 1, 1, 1});
 
-    firstBattle->battleStart();
+    firstBattle->start();
 
     cout << "Hello World!\n";
 }
