@@ -21,9 +21,8 @@ private:
 
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
 
-public:
 	void initializeTotals();
-
+public:
 	// General Status
 	int Id;
 	std::string Name;
@@ -63,6 +62,8 @@ public:
 
 	int HpCurrent;
 	int ManaCurrent;
+
+	bool isDead();
 
 	// Other attributes
 	// int SpellsId[];

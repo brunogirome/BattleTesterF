@@ -68,9 +68,18 @@ void Battle::printBattle()
 	drawLine(59);
 	
 	for (int i = 0; i < enemyPartySize; i++) {
-		std::cout << "[" << i + 1 << "] " << enemyParty[i].Name << '\n';
+		Enemy* currentEnemy = &(enemyParty[i]);
 
-		std::cout << "HP: ??/??" << '\n';
+		std::cout << "[" << i + 1 << "] " << currentEnemy->Name << '\n';
+
+		if (!currentEnemy->isDead()) {
+			std::cout << "HP: ??/??" << '\n';
+		}
+		else {
+			std::cout << "DEAD" << '\n';
+		}
+
+		delete currentEnemy;
 	}
 
 	std::cout << '\n' << "Your team:" << '\n';
@@ -78,11 +87,15 @@ void Battle::printBattle()
 	drawLine(59);
 
 	for (int i = 0; i < partySize; i++) {
-		std::cout << '\n' << party->PartyMembers[i].Name << '\n';
+		Hero* partyMember = &(party->PartyMembers[i]);
 
-		std::cout << "HP: " << party->PartyMembers[i].HpCurrent << "/" << party->PartyMembers[i].HpTotal << '\n';
+		std::cout << '\n' << partyMember->Name << '\n';
 
-		std::cout << "Mana: " << party->PartyMembers[i].ManaCurrent << "/" << party->PartyMembers[i].ManaTotal << '\n';
+		std::cout << "HP: " << partyMember->HpCurrent << "/" << partyMember->HpTotal << '\n';
+
+		std::cout << "Mana: " << partyMember->ManaCurrent << "/" << partyMember->ManaTotal << '\n';
+
+		delete partyMember;
 	}
 
 	drawLine(59);
@@ -182,7 +195,7 @@ void Battle::enemyTurn(int attackerPosition) {
 
 	// Checking if the enemy isn't trying to attack a dead hero
 	while (invalidTarget) {
-		if (~heroTarget->HpCurrent <= 0) {
+		if (!heroTarget->isDead()) {
 			invalidTarget = false;
 
 			continue;
@@ -210,7 +223,7 @@ void Battle::selectAction(int attackerPosition)
 
 	// Battle option select
 	while (optionInvalid) {
-		std::cout << heroName << " turn!\n\nSelect your action: " << '\n' << "[1] - Attack [2] - Defend" << '\n';
+		std::cout << heroName << " turn!\n\nSelect your action:\n[1] Attack [2] Defend\n";
 
 		std::cin >> battleOption;
 
@@ -310,22 +323,20 @@ void Battle::sortAttackOrder()
 {
 	std::vector<actorAttackOrder> actorsSpeedOrder;
 
-	bool isDead;
-
 	for (int i = 0; i < party->PartyMembers.size(); i++) {
 		Hero* currentHero = &(party->PartyMembers[i]);
 
-		isDead = currentHero->HpCurrent <= 0;
+		actorsSpeedOrder.emplace_back(i, currentHero->SpeedTotal, typeOfActorEnum::hero, currentHero->isDead());
 
-		actorsSpeedOrder.emplace_back(i, currentHero->SpeedTotal, typeOfActorEnum::hero, isDead);
+		delete currentHero;
 	}
 
 	for (int i = 0; i < enemyParty.size(); i++) {
 		Enemy* currentEnemy = &(enemyParty[i]);
 
-		isDead = currentEnemy->HpCurrent <= 0;
+		actorsSpeedOrder.emplace_back(i, currentEnemy->SpeedTotal, typeOfActorEnum::enemy, currentEnemy->isDead());
 
-		actorsSpeedOrder.emplace_back(i, currentEnemy->SpeedTotal, typeOfActorEnum::enemy, isDead);
+		delete currentEnemy;
 	}
 
 	int actorSpeedSizes = (int)actorsSpeedOrder.size(), i, j;
