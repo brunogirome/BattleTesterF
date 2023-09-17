@@ -153,10 +153,10 @@ bool Battle::loop()
 		printBattle();
 
 		if (currentAttacker.TypeOfActor == typeOfActorEnum::hero) {
-			selectAction(attackerPointer);
+			selectAction(currentAttacker.Position);
 		}
 		else {
-			enemyTurn(attackerPointer);
+			enemyTurn(currentAttacker.Position);
 		}
 
 		currentRound++;
@@ -169,6 +169,33 @@ void Battle::enemyTurn(int attackerPosition) {
 	std::cout << enemyParty[attackerPosition].Name << " turn! " << '\n';
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+	std::srand((unsigned) time(0));
+
+	Enemy* currentEnemy = &(enemyParty[attackerPosition]);
+
+	bool invalidTarget = true;
+
+	int targetSelector = rand() % party->PartyMembers.size();
+
+	Hero* heroTarget = &(party->PartyMembers[targetSelector]);
+
+	// Checking if the enemy isn't trying to attack a dead hero
+	while (invalidTarget) {
+		if (~heroTarget->HpCurrent <= 0) {
+			invalidTarget = false;
+
+			continue;
+		}
+
+		targetSelector = rand() % party->PartyMembers.size();
+
+		heroTarget = &(party->PartyMembers[targetSelector]);
+	}
+
+	int damage = currentEnemy->MeelePowerTotal - (int)(heroTarget->MeeleDefenseTotal);
+
+	damage = damage < 0 ? 1 : damage;
 }
 
 void Battle::selectAction(int attackerPosition)
@@ -177,9 +204,9 @@ void Battle::selectAction(int attackerPosition)
 
 	bool optionInvalid = true, enemySelectedInvalid = true;
 
-	Hero currentHero = party->PartyMembers[attackerPosition];
+	Hero* currentHero = &(party->PartyMembers[attackerPosition]);
 
-	std::string heroName = currentHero.Name;
+	std::string heroName = currentHero->Name;
 
 	// Battle option select
 	while (optionInvalid) {
@@ -233,10 +260,12 @@ void Battle::selectAction(int attackerPosition)
 			continue;
 		}
 
-		Enemy selectedEnemy = enemyParty[enemySelected];
+		Enemy* selectedEnemy = &(enemyParty[enemySelected]);
 
-		if (selectedEnemy.HpCurrent <= 0) {
-			std::cout << "Select another enemy!";
+		std::string enemyName = selectedEnemy->Name;
+
+		if (selectedEnemy->HpCurrent <= 0) {
+			std::cout << enemyName << "is dead, select another enemy!";
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -245,11 +274,9 @@ void Battle::selectAction(int attackerPosition)
 			continue;
 		}
 
-		int damage = currentHero.MeelePowerTotal * 10 - (int)(selectedEnemy.MeeleDefenseTotal);
+		int damage = currentHero->MeelePowerTotal - (int)(selectedEnemy->MeeleDefenseTotal);
 
 		damage = damage < 0 ? 1 : damage;
-
-		std::string enemyName = selectedEnemy.Name;
 
 		std::cout << "Attacking " << enemyName << "..." << '\n' << '\n';
 
@@ -286,19 +313,19 @@ void Battle::sortAttackOrder()
 	bool isDead;
 
 	for (int i = 0; i < party->PartyMembers.size(); i++) {
-		Hero currentHero = party->PartyMembers[i];
+		Hero* currentHero = &(party->PartyMembers[i]);
 
-		isDead = currentHero.HpCurrent <= 0;
+		isDead = currentHero->HpCurrent <= 0;
 
-		actorsSpeedOrder.emplace_back(i, currentHero.SpeedTotal, typeOfActorEnum::hero, isDead);
+		actorsSpeedOrder.emplace_back(i, currentHero->SpeedTotal, typeOfActorEnum::hero, isDead);
 	}
 
 	for (int i = 0; i < enemyParty.size(); i++) {
-		Enemy currentEnemy = enemyParty[i];
+		Enemy* currentEnemy = &(enemyParty[i]);
 
-		isDead = currentEnemy.HpCurrent <= 0;
+		isDead = currentEnemy->HpCurrent <= 0;
 
-		actorsSpeedOrder.emplace_back(i, currentEnemy.SpeedTotal, typeOfActorEnum::enemy, isDead);
+		actorsSpeedOrder.emplace_back(i, currentEnemy->SpeedTotal, typeOfActorEnum::enemy, isDead);
 	}
 
 	int actorSpeedSizes = (int)actorsSpeedOrder.size(), i, j;
