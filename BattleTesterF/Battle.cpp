@@ -38,19 +38,19 @@ void Battle::start()
 	std::string finalMessage;
 
 	if (loop()) {
-		finalMessage = "You win";
+		finalMessage = "VICTORY!\n\n";
 	}
 	else {
-		finalMessage = "You loose!";
+		finalMessage = "GAME OVER...\n\n";
 	}
 
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
 	system("cls");
 
 	std::cout << '\n' << '\n' << "\t\t" << finalMessage;
 
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(888));
 }
 
 void Battle::printBattle()
@@ -180,13 +180,15 @@ bool Battle::loop()
 }
 
 void Battle::enemyTurn(int attackerPosition) {
-	std::cout << enemyParty[attackerPosition].Name << " turn! " << '\n';
+	Enemy* currentEnemy = &(enemyParty[attackerPosition]);
+
+	std::string enemyName = currentEnemy->Name;
+
+	std::cout << currentEnemy->Name << " turn!\n'";
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
 	std::srand((unsigned) time(0));
-
-	Enemy* currentEnemy = &(enemyParty[attackerPosition]);
 
 	bool invalidTarget = true;
 
@@ -210,6 +212,26 @@ void Battle::enemyTurn(int attackerPosition) {
 	int damage = currentEnemy->MeelePowerTotal - (int)(heroTarget->MeeleDefenseTotal);
 
 	damage = damage < 0 ? 1 : damage;
+
+	std::string targetHeroName = heroTarget->Name;
+
+	std::cout << enemyName << " is attacking " << targetHeroName << "!" << '\n' << '\n';
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(999));
+
+	std::cout << "Dealt " << damage << " damage on " << targetHeroName << "!" << '\n' << '\n';
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(1200));
+
+	heroTarget->HpCurrent -= damage;
+
+	if (heroTarget->isDead()) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+		std::cout << enemyName << " killed " << targetHeroName << "!" << '\n';
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(888));
+	}
 }
 
 void Battle::selectAction(int attackerPosition)
@@ -302,18 +324,16 @@ void Battle::selectAction(int attackerPosition)
 
 		std::cout << "Dealt " << damage << " damage on " << enemyName << "!" << '\n' << '\n';
 
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
-		int enemyCurrentHp = selectedEnemy->HpCurrent - damage;
+		selectedEnemy->HpCurrent -= damage;
 
-		selectedEnemy->HpCurrent = enemyCurrentHp;
-
-		if (enemyCurrentHp <= 0) {
+		if (selectedEnemy->isDead()) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
 			std::cout << heroName << " killed " << enemyName << "!" << '\n';
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(666));
+			std::this_thread::sleep_for(std::chrono::milliseconds(999));
 		}
 
 		system("cls");
