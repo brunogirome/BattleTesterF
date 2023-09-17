@@ -20,13 +20,13 @@ private:
 
 	Party* party;
 
-	vector<Enemy> enemyParty;
+	std::vector<Enemy> enemyParty;
 
-	vector<actorAttackOrder> attackOrder;
+	std::vector<actorAttackOrder> attackOrder;
 
 	int currentRound;
 
-	string getLine(int size, string character = "-");
+	std::string getLine(int size, std::string character = "-");
 
 	bool loop();
 
@@ -36,9 +36,11 @@ private:
 
 	void selectAction(int attackerPosition);
 
+	void enemyTurn(int attackerPosition);
+
 	void printBattle();
 public:
-	Battle(Game* game, vector<int> enemyPartyIds);
+	Battle(Game* game, std::vector<int> enemyPartyIds);
 
 	void start();
 };

@@ -8,8 +8,8 @@ private:
 	Database* database;
 
 public:
-	vector<Enemy> Enemies;
+	std::vector<Enemy> Enemies;
 
-	EnemyParty(vector<int> enemiesId, Database* gameDatabase);
+	EnemyParty(std::vector<int> enemiesId, Database* gameDatabase);
 };
 

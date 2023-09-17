@@ -21,11 +21,8 @@ void CombatActorInterface::initializeTotals() {
 	ManaCurrent = this->ManaTotal;
 }
 
-int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, string debugMessage) {
+int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus) {
 	const int bonus = CombatType == combatStatusBonus ? 2 : 1;
-
-	if (debugMessage != "")
-		cout << debugMessage << Name << ": " << baseStatus << "+" << "((" << multiplier << "*" << combatStatusValue << ") * " << bonus << "));" << endl;
 
 	return (int)round(baseStatus + ((multiplier * combatStatusValue) * bonus));
 }

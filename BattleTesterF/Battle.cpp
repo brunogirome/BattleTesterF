@@ -4,9 +4,9 @@ void Battle::start()
 {
 	system("cls");
 
-	string battleStartHeader = "";
+	std::string battleStartHeader = "";
 
-	string auxHeroName, auxEnemyName, auxVersus;
+	std::string auxHeroName, auxEnemyName, auxVersus;
 
 	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party->PartyMembers.size();
 
@@ -27,15 +27,15 @@ void Battle::start()
 		battleStartHeader += auxEnemyName + auxVersus +  auxHeroName + "\n\n";
 	}
 
-	cout << battleStartHeader;
+	std::cout << battleStartHeader;
 
-	this_thread::sleep_for(chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	system("cls");
 
-	cout << "Combat started!" << endl;
+	std::cout << "Combat started!" << '\n';
 
-	string finalMessage;
+	std::string finalMessage;
 
 	if (loop()) {
 		finalMessage = "You win";
@@ -44,53 +44,53 @@ void Battle::start()
 		finalMessage = "You loose!";
 	}
 
-	this_thread::sleep_for(chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	system("cls");
 
-	cout << endl << endl << "\t\t" << finalMessage;
+	std::cout << '\n' << '\n' << "\t\t" << finalMessage;
 
-	this_thread::sleep_for(chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 void Battle::printBattle()
 {
-	string uiLines = "";
+	std::string uiLines = "";
 
-	string auxNameEnemy, auxHeroName;
+	std::string auxNameEnemy, auxHeroName;
 
 	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party->PartyMembers.size();
 
 	drawLine(59);
 
-	cout << "Enemy line: " << endl;
+	std::cout << "Enemy line: " << '\n';
 
 	drawLine(59);
 	
 	for (int i = 0; i < enemyPartySize; i++) {
-		cout << "[" << i + 1 << "] " << enemyParty[i].Name << endl;
+		std::cout << "[" << i + 1 << "] " << enemyParty[i].Name << '\n';
 
-		cout << "HP: ??/??" << endl;
+		std::cout << "HP: ??/??" << '\n';
 	}
 
-	cout << endl << "Your team:" << endl;
+	std::cout << '\n' << "Your team:" << '\n';
 
 	drawLine(59);
 
 	for (int i = 0; i < partySize; i++) {
-		cout << endl << party->PartyMembers[i].Name << endl;
+		std::cout << '\n' << party->PartyMembers[i].Name << '\n';
 
-		cout << "HP: " << party->PartyMembers[i].HpCurrent << "/" << party->PartyMembers[i].HpTotal << endl;
+		std::cout << "HP: " << party->PartyMembers[i].HpCurrent << "/" << party->PartyMembers[i].HpTotal << '\n';
 
-		cout << "Mana: " << party->PartyMembers[i].ManaCurrent << "/" << party->PartyMembers[i].ManaTotal << endl;
+		std::cout << "Mana: " << party->PartyMembers[i].ManaCurrent << "/" << party->PartyMembers[i].ManaTotal << '\n';
 	}
 
 	drawLine(59);
 
-	cout << uiLines;
+	std::cout << uiLines;
 }
 
-Battle::Battle(Game* game, vector<int> enemyPartyIds)
+Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
 {
 	party = game->GameParty;
 
@@ -148,7 +148,7 @@ bool Battle::loop()
 
 		actorAttackOrder currentAttacker = attackOrder[attackerPointer];
 
-		cout << "Round " << currentRound << endl;
+		std::cout << "Round " << currentRound << '\n';
 
 		printBattle();
 
@@ -156,13 +156,19 @@ bool Battle::loop()
 			selectAction(attackerPointer);
 		}
 		else {
-			cout << "Enemy round" << endl;
+			enemyTurn(attackerPointer);
 		}
 
 		currentRound++;
 
 		attackerPointer++;
 	}
+}
+
+void Battle::enemyTurn(int attackerPosition) {
+	std::cout << enemyParty[attackerPosition].Name << " turn! " << '\n';
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(333));
 }
 
 void Battle::selectAction(int attackerPosition)
@@ -173,13 +179,13 @@ void Battle::selectAction(int attackerPosition)
 
 	Hero currentHero = party->PartyMembers[attackerPosition];
 
-	string heroName = currentHero.Name;
+	std::string heroName = currentHero.Name;
 
 	// Battle option select
 	while (optionInvalid) {
-		cout << heroName << " turn!\n\nSelect your action: " << endl << "[1] - Attack [2] - Defend" << endl;
+		std::cout << heroName << " turn!\n\nSelect your action: " << '\n' << "[1] - Attack [2] - Defend" << '\n';
 
-		cin >> battleOption;
+		std::cin >> battleOption;
 
 		switch (battleOption) {
 			case 1:
@@ -187,18 +193,18 @@ void Battle::selectAction(int attackerPosition)
 
 				break;
 			case 2: 
-				cout << "Defend does nothing right now!" << endl;
+				std::cout << "Defend does nothing right now!" << '\n';
 
-				this_thread::sleep_for(chrono::seconds(1));
+				std::this_thread::sleep_for(std::chrono::seconds(1));
 
 				system("cls");
 
 				optionInvalid = false;
 				break;
 			default:
-				cout << "Invalid option!" << endl;
+				std::cout << "Invalid option!" << '\n';
 
-				this_thread::sleep_for(chrono::seconds(1));
+				std::this_thread::sleep_for(std::chrono::seconds(1));
 
 				system("cls");
 
@@ -211,16 +217,16 @@ void Battle::selectAction(int attackerPosition)
 	while (enemySelectedInvalid && battleOption == 1) {
 		printBattle();
 
-		cout << "Select one enemy: ";
+		std::cout << "Select one enemy: ";
 
-		cin >> enemySelected;
+		std::cin >> enemySelected;
 
 		enemySelected -= 1;
 
 		if (enemySelected > enemyParty.size()) {
-			cout << "Invalid enemy!";
+			std::cout << "Invalid enemy!";
 
-			this_thread::sleep_for(chrono::seconds(1));
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 
 			system("cls");
 
@@ -230,9 +236,9 @@ void Battle::selectAction(int attackerPosition)
 		Enemy selectedEnemy = enemyParty[enemySelected];
 
 		if (selectedEnemy.HpCurrent <= 0) {
-			cout << "Select another enemy!";
+			std::cout << "Select another enemy!";
 
-			this_thread::sleep_for(chrono::seconds(1));
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 
 			system("cls");
 
@@ -243,26 +249,26 @@ void Battle::selectAction(int attackerPosition)
 
 		damage = damage < 0 ? 1 : damage;
 
-		string enemyName = selectedEnemy.Name;
+		std::string enemyName = selectedEnemy.Name;
 
-		cout << "Attacking " << enemyName << "..." << endl << endl;
+		std::cout << "Attacking " << enemyName << "..." << '\n' << '\n';
 
-		this_thread::sleep_for(chrono::milliseconds(333));
+		std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
-		cout << "Dealt " << damage << " damage on " << enemyName << "!" << endl << endl;
+		std::cout << "Dealt " << damage << " damage on " << enemyName << "!" << '\n' << '\n';
 
-		this_thread::sleep_for(chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		int enemyCurrentHp = enemyParty[enemySelected].HpCurrent - damage;
 
 		enemyParty[enemySelected].HpCurrent = enemyCurrentHp;
 
 		if (enemyCurrentHp <= 0) {
-			this_thread::sleep_for(chrono::milliseconds(333));
+			std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
-			cout << heroName << " killed " << enemyName << "!" << endl;
+			std::cout << heroName << " killed " << enemyName << "!" << '\n';
 
-			this_thread::sleep_for(chrono::milliseconds(666));
+			std::this_thread::sleep_for(std::chrono::milliseconds(666));
 		}
 
 		system("cls");
@@ -275,7 +281,7 @@ void Battle::selectAction(int attackerPosition)
 
 void Battle::sortAttackOrder()
 {
-	vector<actorAttackOrder> actorsSpeedOrder;
+	std::vector<actorAttackOrder> actorsSpeedOrder;
 
 	bool isDead;
 
@@ -304,7 +310,7 @@ void Battle::sortAttackOrder()
 
 		for (j = 0;  j < actorSpeedSizes - i - 1; j++) {
 			if (actorsSpeedOrder[j].Speed < actorsSpeedOrder[j + 1].Speed) {
-				swap(actorsSpeedOrder[j], actorsSpeedOrder[j + 1]);
+				std::swap(actorsSpeedOrder[j], actorsSpeedOrder[j + 1]);
 
 				swaped = true;
 			}
@@ -315,10 +321,10 @@ void Battle::sortAttackOrder()
 		}
 	}
 
-	/*cout << "speed debug" << endl;
+	/*std::cout << "speed debug" << '\n';
 
 	for (i = 0; i < actorSpeedSizes; i++) {
-		cout << "Position: " << actorSpeedOrder[i].Position << ", speed: " << actorSpeedOrder[i].Speed << ", type: " << ((actorSpeedOrder[i].TypeOfActor == typeOfActorEnum::hero) ? "hero" : "enemy") << endl;
+		std::cout << "Position: " << actorSpeedOrder[i].Position << ", speed: " << actorSpeedOrder[i].Speed << ", type: " << ((actorSpeedOrder[i].TypeOfActor == typeOfActorEnum::hero) ? "hero" : "enemy") << '\n';
 	}*/
 
 	attackOrder = actorsSpeedOrder;
@@ -332,8 +338,8 @@ Battle::actorAttackOrder::actorAttackOrder(int position, int speed, typeOfActorE
 	this->IsDead = isDead;
 }
 
-string Battle::getLine(int size, string character) {
-	string line = "";
+std::string Battle::getLine(int size, std::string character) {
+	std::string line = "";
 
 	for (int i = 0; i < size; i++) {
 		line += character;
@@ -343,7 +349,7 @@ string Battle::getLine(int size, string character) {
 }
 
 void Battle::drawLine(int size, bool border) {
-	string line = border ? "+" : "";
+	std::string line = border ? "+" : "";
 
 	for (int i = 0; i < size; i++) {
 		line += "-";
@@ -353,5 +359,5 @@ void Battle::drawLine(int size, bool border) {
 
 	line += "\n";
 
-	cout << line;
+	std::cout << line;
 }

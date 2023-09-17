@@ -5,7 +5,7 @@ sqlite3* db;
 sqlite3* connect()
 {
     if (sqlite3_open("../Database/BattleTesterF.db", &db) != SQLITE_OK) {
-        cout << "Error while connection to the database\n";
+        std::cout << "Error while connection to the database\n";
 
         return NULL;
     }

@@ -1,12 +1,9 @@
 #pragma once
 
-#include <iostream>
 #include <string>
 
 #include "CombatTypesEnum.h"
 #include "ElementsEnum.h"
-
-using namespace std;
 
 class CombatActorInterface {
 private:
@@ -22,14 +19,14 @@ private:
 	const float MEELE_DEFENSE_MULTIPLIER = 0.5f;
 	const float MAGIC_DEFENSE_MULTIPLIER = 0.5f;
 
-	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, string debugMessage = "");
+	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
 
 public:
 	void initializeTotals();
 
 	// General Status
 	int Id;
-	string Name;
+	std::string Name;
 	CombatTypesEnum CombatType;
 	ElementsEnum Element;
 

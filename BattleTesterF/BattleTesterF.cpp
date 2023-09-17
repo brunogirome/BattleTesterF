@@ -3,11 +3,9 @@
 #include "Game.h"
 #include "Battle.h"
 
-using namespace std;
-
 int main()
 {
-    string input;
+    std::string input;
 
     Game* game = new Game();
 
@@ -29,5 +27,5 @@ int main()
 
     firstBattle->start();
 
-    cout << "Hello World!\n";
+    std::cout << "Hello World!\n";
 }

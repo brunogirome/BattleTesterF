@@ -11,9 +11,9 @@ class Database {
 public:
 	Database();
 
-	vector<Hero> Heroes;
+	std::vector<Hero> Heroes;
 
-	vector<Enemy> Enemies;
+	std::vector<Enemy> Enemies;
 
 	Hero getAHero(int id);
 

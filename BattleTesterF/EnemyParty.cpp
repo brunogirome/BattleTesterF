@@ -1,6 +1,6 @@
 #include "EnemyParty.h"
 
-EnemyParty::EnemyParty(vector<int> enemiesId, Database* gameDatabase)
+EnemyParty::EnemyParty(std::vector<int> enemiesId, Database* gameDatabase)
 {
 	this->database = gameDatabase;
 

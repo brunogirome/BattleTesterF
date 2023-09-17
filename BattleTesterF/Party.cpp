@@ -1,6 +1,6 @@
 #include "Party.h"
 
-Party::Party(vector<int> idHeroes, Database* database)
+Party::Party(std::vector<int> idHeroes, Database* database)
 {
 	this->database = database;
 
