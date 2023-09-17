@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Game.h"
-//#include "Hero.h";
+
+#include "FancyDialog.h"
 
 enum class typeOfActorEnum { hero, enemy };
 

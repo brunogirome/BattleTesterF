@@ -215,11 +215,13 @@ void Battle::enemyTurn(int attackerPosition) {
 
 	std::string targetHeroName = heroTarget->Name;
 
-	std::cout << enemyName << " is attacking " << targetHeroName << "!" << '\n' << '\n';
+	FancyDialog(enemyName + " is attacking " + targetHeroName + "!", 15);
+	//std::cout << enemyName << " is attacking " << targetHeroName << "!" << '\n' << '\n';
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(999));
 
-	std::cout << "Dealt " << damage << " damage on " << targetHeroName << "!" << '\n' << '\n';
+	FancyDialog("Dealt " + std::to_string(damage) + " damage on " + targetHeroName + "!", 15);
+	//std::cout << "Dealt " << damage << " damage on " << targetHeroName << "!" << '\n' << '\n';
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
@@ -228,10 +230,14 @@ void Battle::enemyTurn(int attackerPosition) {
 	if (heroTarget->isDead()) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
+		FancyDialog(enemyName + " killed " + targetHeroName + "!", 15);
 		std::cout << enemyName << " killed " << targetHeroName << "!" << '\n';
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(888));
 	}
+	sortAttackOrder();
+
+	system("cls");
 }
 
 void Battle::selectAction(int attackerPosition)
@@ -318,11 +324,13 @@ void Battle::selectAction(int attackerPosition)
 
 		damage = damage < 0 ? 1 : damage;
 
-		std::cout << "Attacking " << enemyName << "..." << '\n' << '\n';
+		FancyDialog("Attacking " + enemyName + "...", 10);
+		//std::cout << "Attacking " << enemyName << "..." << '\n' << '\n';
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
-		std::cout << "Dealt " << damage << " damage on " << enemyName << "!" << '\n' << '\n';
+		FancyDialog("Dealt " + std::to_string(damage) + " damage on " + enemyName + "!", 15);
+		//std::cout << "Dealt " << damage << " damage on " << enemyName << "!" << '\n' << '\n';
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
@@ -331,7 +339,8 @@ void Battle::selectAction(int attackerPosition)
 		if (selectedEnemy->isDead()) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
-			std::cout << heroName << " killed " << enemyName << "!" << '\n';
+			FancyDialog(heroName + " killed " + enemyName + "!", 15);
+			//std::cout << heroName << " killed " << enemyName << "!" << '\n';
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(999));
 		}

@@ -28,6 +28,9 @@
     <Filter Include="Source Files\GameState">
       <UniqueIdentifier>{af436d08-79a8-4f3b-ae2f-7bf72b82427c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{732b4c24-9ef5-476a-93bc-0059e8b7047a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BattleTesterF.cpp">
@@ -72,6 +75,9 @@
     <ClCompile Include="EnemyParty.cpp">
       <Filter>Source Files\GameState</Filter>
     </ClCompile>
+    <ClCompile Include="FancyDialog.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Party.h">
@@ -96,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnemyParty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FancyDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
