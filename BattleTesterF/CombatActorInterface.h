@@ -21,8 +21,9 @@ private:
 
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
 
-	void initializeTotals();
 public:
+	void initializeTotals();
+
 	// General Status
 	int Id;
 	std::string Name;

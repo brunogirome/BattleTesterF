@@ -23,7 +23,7 @@ void CombatActorInterface::initializeTotals() {
 
 bool CombatActorInterface::isDead()
 {
-	return this->HpCurrent <= 0;
+	return HpCurrent <= 0;
 }
 
 int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus) {
