@@ -29,7 +29,7 @@ void Battle::start()
 
 	std::cout << battleStartHeader;
 
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	system("cls");
 
@@ -137,6 +137,18 @@ bool Battle::loop()
 			if (attacker.IsDead) {
 				if (attackerPointer == i) {
 					attackerPointer++;
+
+					if (attackerPointer >= roudSize) {
+						attackerPointer = 0;
+
+						i = 0;
+
+						deadEnemies = 0;
+
+						deadHeroes = 0;
+
+						continue;
+					}
 				}
 
 				switch (attacker.TypeOfActor) {
