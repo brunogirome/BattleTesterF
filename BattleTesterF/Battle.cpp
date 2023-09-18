@@ -196,7 +196,7 @@ void Battle::enemyTurn(int attackerPosition) {
 
 	std::string enemyName = currentEnemy->Name;
 
-	std::cout << currentEnemy->Name << " turn!\n'";
+	std::cout << enemyName << " turn!\n";
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
