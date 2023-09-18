@@ -23,7 +23,7 @@ int main()
 
     system("cls");*/
 
-    Battle* firstBattle = new Battle(game, {1, 1, 1, 1});
+    Battle* firstBattle = new Battle(game, {1, 1, 2, 2});
 
     firstBattle->start();
 

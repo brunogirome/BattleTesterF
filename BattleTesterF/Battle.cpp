@@ -13,12 +13,12 @@ void Battle::start()
 	int biggestParty = enemyPartySize >= partySize ? enemyPartySize : partySize;
 
 	battleStartHeader += "\n\n\n\n\n\n";
-	battleStartHeader += "\t+-----------------------------------+\n";
-	battleStartHeader += "\t|          Battle Start!            |\n";
-	battleStartHeader += "\t+-----------------------------------+\n";
+	battleStartHeader += "\t+-------------------------------------------+\n";
+	battleStartHeader += "\t|                Battle Start!              |\n";
+	battleStartHeader += "\t+-------------------------------------------+\n";
 
 	for (int i = 0; i < biggestParty; i++) {
-		auxVersus = i > 0 ? "\t   \t" : "\t VS \t";
+		auxVersus = i > 0 ? "\t\t\t\t" : "\t\t VS \t";
 
 		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i].Name : "\t\t";
 
@@ -29,7 +29,7 @@ void Battle::start()
 
 	std::cout << battleStartHeader;
 
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 
 	system("cls");
 
@@ -209,19 +209,17 @@ void Battle::enemyTurn(int attackerPosition) {
 		heroTarget = &(party->PartyMembers[targetSelector]);
 	}
 
-	int damage = currentEnemy->MeelePowerTotal - (int)(heroTarget->MeeleDefenseTotal);
+	int damage = currentEnemy->MeelePowerTotal * 5 - (int)(heroTarget->MeeleDefenseTotal);
 
 	damage = damage < 0 ? 1 : damage;
 
 	std::string targetHeroName = heroTarget->Name;
 
 	FancyDialog(enemyName + " is attacking " + targetHeroName + "!", 15);
-	//std::cout << enemyName << " is attacking " << targetHeroName << "!" << '\n' << '\n';
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(999));
 
 	FancyDialog("Dealt " + std::to_string(damage) + " damage on " + targetHeroName + "!", 15);
-	//std::cout << "Dealt " << damage << " damage on " << targetHeroName << "!" << '\n' << '\n';
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
@@ -231,7 +229,6 @@ void Battle::enemyTurn(int attackerPosition) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
 		FancyDialog(enemyName + " killed " + targetHeroName + "!", 15);
-		std::cout << enemyName << " killed " << targetHeroName << "!" << '\n';
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(888));
 	}
