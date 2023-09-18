@@ -1,3 +1,3 @@
 #pragma once
 
-enum ElementsEnum { Fire = 0, Water = 1, Earth = 2, Wind = 3, Dark = 4, Light = 5 };
+enum ElementsEnum { NEULTRAL = 0, FIRE = 1, WATER = 2, EARTH = 3, WIND = 4, DARK = 5, LIGHT = 6 };

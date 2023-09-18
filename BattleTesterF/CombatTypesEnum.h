@@ -1,3 +1,3 @@
 #pragma once
 
-enum CombatTypesEnum { TYPE_STRENGTH = 0, TYPE_AGILITY = 1, TYPE_INTELLIGENCE = 2 };
+enum CombatTypesEnum { NEUTRAL = 0, TYPE_STRENGTH = 1, TYPE_AGILITY = 2, TYPE_INTELLIGENCE = 3 };
