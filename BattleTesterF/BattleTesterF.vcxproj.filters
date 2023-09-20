@@ -78,6 +78,15 @@
     <ClCompile Include="FancyDialog.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="SpellInterface.cpp">
+      <Filter>Source Files\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="SpellTypesEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="Support.cpp">
+      <Filter>Source Files\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Party.h">
@@ -105,6 +114,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FancyDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpellInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PartyBuffsEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="BuffTypesEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Support.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

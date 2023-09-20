@@ -22,7 +22,7 @@ private:
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
 
 public:
-	void initializeTotals();
+	CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase);
 
 	// General Status
 	int Id;

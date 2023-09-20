@@ -1,24 +1,41 @@
 #include "CombatActorInterface.h"
 
+CombatActorInterface::CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase)
+{
+	this->Id = id;
+	this->Name = name;
+	this->CombatType = combatType;
+	this->Element = element;
+	this->Strength = strength;
+	this->Agility = agility;
+	this->Intelligence = intelligence;
+	this->HpBase = hpBase;
+	this->ManaBase = manaBase;
+	this->SpeedBase = speedBase;
+	this->EvasionBase = evasionBase;
+	this->StaminaBase = staminaBase;
+	this->MeelePowerBase = meelePowerBase;
+	this->MagicPowerBase = magicPowerBase;
+	this->MeeleDefenseBase = meeleDefenseBase;
+	this->MagicDefenseBase = magicDefenseBase;
 
-void CombatActorInterface::initializeTotals() {
 	// Setting basic status
-	HpTotal = totalStatusFormula(HpBase, HP_MULTIPLIER, Strength, TYPE_STRENGTH);
-	ManaTotal = totalStatusFormula(ManaBase, MANA_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
-	SpeedTotal = totalStatusFormula(SpeedBase, MANA_MULTIPLIER, Agility, TYPE_AGILITY);
-	EvasionTotal = totalStatusFormula(EvasionBase, EVASION_MULTIPLIER, Agility, TYPE_AGILITY);
-	StaminaTotal = totalStatusFormula(StaminaBase, STAMINA_MULTIPLIER, Agility, TYPE_AGILITY);
+	this->HpTotal = totalStatusFormula(HpBase, HP_MULTIPLIER, Strength, TYPE_STRENGTH);
+	this->ManaTotal = totalStatusFormula(ManaBase, MANA_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
+	this->SpeedTotal = totalStatusFormula(SpeedBase, MANA_MULTIPLIER, Agility, TYPE_AGILITY);
+	this->EvasionTotal = totalStatusFormula(EvasionBase, EVASION_MULTIPLIER, Agility, TYPE_AGILITY);
+	this->StaminaTotal = totalStatusFormula(StaminaBase, STAMINA_MULTIPLIER, Agility, TYPE_AGILITY);
 
 	// Setting damage status
-	MeelePowerTotal = totalStatusFormula(MeelePowerBase, MEELE_POWER_MULTIPLIER, Strength, TYPE_STRENGTH);
-	MagicPowerTotal = totalStatusFormula(MagicPowerBase, MAGIC_POWER_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
+	this->MeelePowerTotal = totalStatusFormula(MeelePowerBase, MEELE_POWER_MULTIPLIER, Strength, TYPE_STRENGTH);
+	this->MagicPowerTotal = totalStatusFormula(MagicPowerBase, MAGIC_POWER_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
 
 	// Setting defense satus
-	MeeleDefenseTotal = totalStatusFormula(MeeleDefenseBase, MEELE_DEFENSE_MULTIPLIER, Strength, TYPE_STRENGTH);
-	MagicDefenseTotal = totalStatusFormula(MagicDefenseBase, MAGIC_DEFENSE_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
+	this->MeeleDefenseTotal = totalStatusFormula(MeeleDefenseBase, MEELE_DEFENSE_MULTIPLIER, Strength, TYPE_STRENGTH);
+	this->MagicDefenseTotal = totalStatusFormula(MagicDefenseBase, MAGIC_DEFENSE_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
 
-	HpCurrent = this->HpTotal;
-	ManaCurrent = this->ManaTotal;
+	this->HpCurrent = this->HpTotal;
+	this->ManaCurrent = this->ManaTotal;
 }
 
 bool CombatActorInterface::isDead()

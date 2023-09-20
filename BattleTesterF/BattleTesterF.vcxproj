@@ -142,9 +142,13 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Party.cpp" />
+    <ClCompile Include="SpellInterface.cpp" />
+    <ClCompile Include="SpellTypesEnum.h" />
+    <ClCompile Include="Support.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Battle.h" />
+    <ClInclude Include="BuffTypesEnum.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="Enemy.h" />
@@ -153,6 +157,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Party.h" />
+    <ClInclude Include="PartyBuffsEnum.h" />
+    <ClInclude Include="SpellInterface.h" />
+    <ClInclude Include="Support.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
