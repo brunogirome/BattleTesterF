@@ -6,6 +6,18 @@ Database::Database()
 
     loadEnemiesFromDatabase();
 
+    loadSpellsFromDatabase();
+
+}
+
+SpellInterface* Database::getASpell(int id)
+{
+    for (SupportSpell spell : SupportSpells) {
+        if (spell.Id = id) {
+            return &spell;
+        }
+    }
+
 }
 
 Hero Database::getAHero(int id)
@@ -94,7 +106,7 @@ void Database::listEnemies()
     }
 }
 
-void Database::loadSupportSpellsFromDatabase()
+void Database::loadSpellsFromDatabase()
 {
     sqlite3* database = connect();
 
@@ -104,7 +116,60 @@ void Database::loadSupportSpellsFromDatabase()
 
     int ret_code = 0;
 
-    std::string query = "SELECT * FROM SupportSpells;";
+    std::string query = "SELECT * FROM Spells;";
+
+    int id, rounds, damage;
+
+    std::string name, description;
+
+    SpellTypesEnum spellType;
+
+    PartyBuffsEnum partyBuff;
+
+    float multiplier;
+
+    ElementsEnum element;
+
+    sqlite3_stmt* statement;
+
+    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK) {
+        std::cout << "Error while executing the query: " << query << '\n';
+
+        disconnect(statement);
+
+        return;
+    }
+
+    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW) {
+        id = sqlite3_column_int(statement, 0);
+
+        name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 1)));
+
+        description = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)));
+
+        spellType = (SpellTypesEnum)sqlite3_column_int(statement, 3);
+
+        if (spellType == SpellTypesEnum::BUFF || SpellTypesEnum::SUPPORT) {
+            rounds = sqlite3_column_int(statement, 5);
+        }
+
+        switch (spellType) {
+        case SpellTypesEnum::BUFF:
+            break;
+        case SpellTypesEnum::DAMAGE:
+            element = (ElementsEnum)sqlite3_column_int(statement, 9);
+
+            break;
+        case SpellTypesEnum::SUPPORT:
+            partyBuff = (PartyBuffsEnum)sqlite3_column_int(statement, 4);
+
+            SupportSpells.emplace_back(id, name, description, spellType, rounds, partyBuff);
+            break;
+        }
+    }
+
+    disconnect(statement);
+
 }
 
 void Database::loadHeroesFromDatabase()
@@ -156,8 +221,34 @@ void Database::loadHeroesFromDatabase()
         meeleDefenseBase = sqlite3_column_int(statement, 14);
         magicDefenseBase = sqlite3_column_int(statement, 15);
 
+        sqlite3_stmt* statementSpells;
+
+        int ret_codeSpells = 0;
+
+        int spellId;
+
+        std::vector<int> heroSpells;
+
+        std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
+
+        if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK) {
+            std::cout << "Error while executing the query: " << query << '\n';
+
+            disconnect(statementSpells);
+
+            return;
+        }
+
+        while ((ret_codeSpells = sqlite3_step(statementSpells)) == SQLITE_ROW) {
+            spellId = sqlite3_column_int(statementSpells, 0);
+
+            heroSpells.emplace_back(spellId);
+        }
+
+        disconnect(statementSpells);
+
         Heroes.emplace_back(id, name, combatType, element, strength, agility, intelligence, hpBase, manaBase, speedBase,
-            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase);
+            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, heroSpells);
     }
 
     disconnect(statement);
@@ -194,6 +285,8 @@ void Database::loadEnemiesFromDatabase()
         return;
     }
 
+    std::vector<int> enemySpells = { };
+
     while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW) {
         id = sqlite3_column_int(statement, 0);
         name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 1)));
@@ -213,7 +306,7 @@ void Database::loadEnemiesFromDatabase()
         magicDefenseBase = sqlite3_column_int(statement, 15);
 
         Enemies.emplace_back(id, name, combatType, element, strength, agility, intelligence, hpBase, manaBase, speedBase,
-            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase);
+            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, enemySpells);
     }
 
     disconnect(statement);

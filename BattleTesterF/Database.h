@@ -22,11 +22,13 @@ public:
 
 	Enemy getAEnemy(int id);
 
+	SpellInterface* getASpell(int id);
+
 	void listHeroes();
 
 	void listEnemies();
 private:
-	void loadSupportSpellsFromDatabase();
+	void loadSpellsFromDatabase();
 
 	void loadHeroesFromDatabase();
 

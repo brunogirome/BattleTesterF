@@ -144,7 +144,7 @@
     <ClCompile Include="Party.cpp" />
     <ClCompile Include="SpellInterface.cpp" />
     <ClCompile Include="SpellTypesEnum.h" />
-    <ClCompile Include="Support.cpp" />
+    <ClCompile Include="SupportSpell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Battle.h" />
@@ -159,7 +159,7 @@
     <ClInclude Include="Party.h" />
     <ClInclude Include="PartyBuffsEnum.h" />
     <ClInclude Include="SpellInterface.h" />
-    <ClInclude Include="Support.h" />
+    <ClInclude Include="SupportSpell.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -84,7 +84,7 @@
     <ClCompile Include="SpellTypesEnum.h">
       <Filter>Source Files\Enums</Filter>
     </ClCompile>
-    <ClCompile Include="Support.cpp">
+    <ClCompile Include="SupportSpell.cpp">
       <Filter>Source Files\Models</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,7 +125,7 @@
     <ClInclude Include="BuffTypesEnum.h">
       <Filter>Source Files\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="Support.h">
+    <ClInclude Include="SupportSpell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

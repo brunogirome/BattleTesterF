@@ -12,5 +12,5 @@ public:
 		int strength, int agility, int intelligence,
 		int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase,
 		int meelePowerBase, int magicPowerBase,
-		int meeleDefenseBase, int magicDefenseBase, std::vector<SpellInterface> spells);
+		int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells);
 };
