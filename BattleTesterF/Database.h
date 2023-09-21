@@ -6,6 +6,7 @@
 
 #include "Hero.h"
 #include "Enemy.h"
+#include "SupportSpell.h"
 
 class Database {
 public:
@@ -15,6 +16,8 @@ public:
 
 	std::vector<Enemy> Enemies;
 
+	std::vector<SupportSpell> SupportSpells;
+
 	Hero getAHero(int id);
 
 	Enemy getAEnemy(int id);
@@ -23,6 +26,8 @@ public:
 
 	void listEnemies();
 private:
+	void loadSupportSpellsFromDatabase();
+
 	void loadHeroesFromDatabase();
 
 	void loadEnemiesFromDatabase();

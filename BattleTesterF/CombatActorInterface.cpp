@@ -1,6 +1,6 @@
 #include "CombatActorInterface.h"
 
-CombatActorInterface::CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase)
+CombatActorInterface::CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<SpellInterface> spells)
 {
 	this->Id = id;
 	this->Name = name;
@@ -36,15 +36,17 @@ CombatActorInterface::CombatActorInterface(int id, std::string name, CombatTypes
 
 	this->HpCurrent = this->HpTotal;
 	this->ManaCurrent = this->ManaTotal;
+
+	this->Spells = spells;
 }
 
 bool CombatActorInterface::isDead()
 {
-	return HpCurrent <= 0;
+	return this->HpCurrent <= 0;
 }
 
 int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus) {
-	const int bonus = CombatType == combatStatusBonus ? 2 : 1;
+	const int bonus = this->CombatType == combatStatusBonus ? 2 : 1;
 
 	return (int)round(baseStatus + ((multiplier * combatStatusValue) * bonus));
 }

@@ -94,6 +94,19 @@ void Database::listEnemies()
     }
 }
 
+void Database::loadSupportSpellsFromDatabase()
+{
+    sqlite3* database = connect();
+
+    if (database == NULL) {
+        return;
+    }
+
+    int ret_code = 0;
+
+    std::string query = "SELECT * FROM SupportSpells;";
+}
+
 void Database::loadHeroesFromDatabase()
 {
     sqlite3* database = connect();

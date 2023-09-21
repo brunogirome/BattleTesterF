@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
+#include "SpellInterface.h"
 #include "CombatTypesEnum.h"
 #include "ElementsEnum.h"
 
@@ -22,7 +24,7 @@ private:
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
 
 public:
-	CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase);
+	CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<SpellInterface> spells);
 
 	// General Status
 	int Id;
@@ -63,6 +65,8 @@ public:
 
 	int HpCurrent;
 	int ManaCurrent;
+
+	std::vector<SpellInterface> Spells;
 
 	bool isDead();
 

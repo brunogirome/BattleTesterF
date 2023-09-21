@@ -4,9 +4,13 @@
 
 class Hero: public CombatActorInterface {
 public:
+	int Level = 1;
+
+	int Experiance = 1;
+
 	Hero(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element,
 		int strength, int agility, int intelligence,
 		int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase,
 		int meelePowerBase, int magicPowerBase,
-		int meeleDefenseBase, int magicDefenseBase);
+		int meeleDefenseBase, int magicDefenseBase, std::vector<SpellInterface> spells);
 };
