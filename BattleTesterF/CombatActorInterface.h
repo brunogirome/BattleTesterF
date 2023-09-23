@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-#include "SpellInterface.h"
 #include "CombatTypesEnum.h"
 #include "ElementsEnum.h"
 
@@ -66,7 +65,7 @@ public:
 	int HpCurrent;
 	int ManaCurrent;
 
-	std::vector<SpellInterface> Spells;
+	std::vector<int> Spells;
 
 	bool isDead();
 

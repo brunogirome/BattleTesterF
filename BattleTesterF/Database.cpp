@@ -12,12 +12,11 @@ Database::Database()
 
 SpellInterface* Database::getASpell(int id)
 {
-    for (SupportSpell spell : SupportSpells) {
-        if (spell.Id = id) {
-            return &spell;
+    for (int i = 0; i < SupportSpells.size(); i++) {
+        if (SupportSpells[i].Id = id) {
+            return &(SupportSpells[1]);
         }
     }
-
 }
 
 Hero Database::getAHero(int id)
@@ -149,7 +148,7 @@ void Database::loadSpellsFromDatabase()
 
         spellType = (SpellTypesEnum)sqlite3_column_int(statement, 3);
 
-        if (spellType == SpellTypesEnum::BUFF || SpellTypesEnum::SUPPORT) {
+        if (spellType == SpellTypesEnum::BUFF || spellType == SpellTypesEnum::SUPPORT) {
             rounds = sqlite3_column_int(statement, 5);
         }
 
@@ -227,11 +226,11 @@ void Database::loadHeroesFromDatabase()
 
         int spellId;
 
-        std::vector<int> heroSpells;
+        std::vector<int> heroSpells = {};
 
-        std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
+        //std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
 
-        if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK) {
+       /* if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK) {
             std::cout << "Error while executing the query: " << query << '\n';
 
             disconnect(statementSpells);
@@ -243,9 +242,9 @@ void Database::loadHeroesFromDatabase()
             spellId = sqlite3_column_int(statementSpells, 0);
 
             heroSpells.emplace_back(spellId);
-        }
+        }*/
 
-        disconnect(statementSpells);
+        //disconnect(statementSpells);
 
         Heroes.emplace_back(id, name, combatType, element, strength, agility, intelligence, hpBase, manaBase, speedBase,
             evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, heroSpells);
@@ -285,7 +284,7 @@ void Database::loadEnemiesFromDatabase()
         return;
     }
 
-    std::vector<int> enemySpells = { };
+    std::vector<int> enemySpells = {};
 
     while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW) {
         id = sqlite3_column_int(statement, 0);
