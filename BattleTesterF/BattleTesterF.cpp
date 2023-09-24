@@ -11,17 +11,20 @@ int main()
 
     game->init();
     
-    /*game->GameDatabase->listHeroes();
-    
-    system("pause");
+    bool debug = true;
+    if (debug) {
+        game->GameDatabase->listHeroes();
 
-    system("cls");
+        system("pause");
 
-    game->GameDatabase->listEnemies();
+        system("cls");
 
-    system("pause");
+        game->GameDatabase->listEnemies();
 
-    system("cls");*/
+        system("pause");
+
+        system("cls");
+    }
 
     Battle* firstBattle = new Battle(game, {1, 1, 2, 2});
 

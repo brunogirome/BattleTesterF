@@ -68,7 +68,4 @@ public:
 	std::vector<int> Spells;
 
 	bool isDead();
-
-	// Other attributes
-	// int SpellsId[];
 };

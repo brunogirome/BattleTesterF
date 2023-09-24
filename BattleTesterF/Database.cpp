@@ -14,7 +14,7 @@ SpellInterface* Database::getASpell(int id)
 {
     for (int i = 0; i < SupportSpells.size(); i++) {
         if (SupportSpells[i].Id = id) {
-            return &(SupportSpells[1]);
+            return &(SupportSpells[i]);
         }
     }
 }
@@ -65,6 +65,14 @@ void Database::listHeroes()
         std::cout << "magicPowerTotal: " << Heroes[i].MagicPowerTotal << '\n';
         std::cout << "meeleDefenseTotal: " << Heroes[i].MeeleDefenseTotal << '\n';
         std::cout << "magicDefenseTotal: " << Heroes[i].MagicDefenseTotal << '\n';
+        std::cout << "--------spells--------" << '\n';
+
+        for (int spellId : Heroes[i].Spells) {
+            SpellInterface* spell = getASpell(spellId);
+
+            std::cout << "Id: " << spell->Id << "| Name: " << spell->Name << "| Type: " << spell->SpellType << '\n';
+        }
+
         std::cout << "-------------------------------" << '\n' << '\n';
     }
 }
@@ -228,9 +236,9 @@ void Database::loadHeroesFromDatabase()
 
         std::vector<int> heroSpells = {};
 
-        //std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
+        std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
 
-       /* if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK) {
+        if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK) {
             std::cout << "Error while executing the query: " << query << '\n';
 
             disconnect(statementSpells);
@@ -242,9 +250,9 @@ void Database::loadHeroesFromDatabase()
             spellId = sqlite3_column_int(statementSpells, 0);
 
             heroSpells.emplace_back(spellId);
-        }*/
+        }
 
-        //disconnect(statementSpells);
+        disconnect(statementSpells);
 
         Heroes.emplace_back(id, name, combatType, element, strength, agility, intelligence, hpBase, manaBase, speedBase,
             evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, heroSpells);
