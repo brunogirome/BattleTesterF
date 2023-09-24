@@ -10,7 +10,7 @@ private:
 	Database* database;
 
 public: 
-	std::vector<Hero> PartyMembers;
+	std::vector<Hero*> PartyMembers;
 
 	Party(std::vector<int> idHeroes, Database* database);
 

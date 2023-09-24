@@ -137,7 +137,6 @@
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="ElementsEnum.h" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyParty.cpp" />
     <ClCompile Include="FancyDialog.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hero.cpp" />
@@ -152,7 +151,6 @@
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyParty.h" />
     <ClInclude Include="FancyDialog.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />

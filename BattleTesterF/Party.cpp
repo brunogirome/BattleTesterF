@@ -11,7 +11,5 @@ Party::Party(std::vector<int> idHeroes, Database* database)
 
 void Party::addToParty(int heroId)
 {
-	Hero findHero = database->getAHero(heroId);
-
-	PartyMembers.push_back(findHero);
+	PartyMembers.push_back(database->getAHero(heroId));
 }

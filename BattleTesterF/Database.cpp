@@ -19,18 +19,14 @@ SpellInterface* Database::getASpell(int id)
     }
 }
 
-Hero Database::getAHero(int id)
+Hero* Database::getAHero(int id)
 {
-    const Hero findHero = Heroes[id - 1];
-
-    return findHero;
+    return &(Heroes[id - 1]);
 }
 
-Enemy Database::getAEnemy(int id)
+Enemy* Database::getAEnemy(int id)
 {
-    const Enemy findEnemy = Enemies[id - 1];
-
-    return findEnemy;
+    return &(Enemies[id - 1]);
 }
 
 void Database::listHeroes()

@@ -20,9 +20,9 @@ void Battle::start()
 	for (int i = 0; i < biggestParty; i++) {
 		auxVersus = i > 0 ? "\t\t\t\t" : "\t\t VS \t";
 
-		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i].Name : "\t\t";
+		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i]->Name : "\t\t";
 
-		auxHeroName = i < partySize ? party->PartyMembers[i].Name : "";
+		auxHeroName = i < partySize ? party->PartyMembers[i]->Name : "";
 
 		battleStartHeader += auxEnemyName + auxVersus +  auxHeroName + "\n\n";
 	}
@@ -68,11 +68,11 @@ void Battle::printBattle()
 	drawLine(59);
 	
 	for (int i = 0; i < enemyPartySize; i++) {
-		Enemy currentEnemy = enemyParty[i];
+		Enemy* currentEnemy = enemyParty[i];
 
-		std::cout << "[" << i + 1 << "] " << currentEnemy.Name;
+		std::cout << "[" << i + 1 << "] " << currentEnemy->Name;
 
-		if (!currentEnemy.isDead()) {
+		if (!currentEnemy->isDead()) {
 			std::cout << " HP: ??/??" << '\n';
 		}
 		else {
@@ -85,14 +85,14 @@ void Battle::printBattle()
 	drawLine(59);
 
 	for (int i = 0; i < partySize; i++) {
-		Hero partyMember = party->PartyMembers[i];
+		Hero* partyMember = party->PartyMembers[i];
 
-		std::cout << '\n' << partyMember.Name << '\n';
+		std::cout << '\n' << partyMember->Name << '\n';
 
-		if (!partyMember.isDead()) {
-			std::cout << "HP: " << partyMember.HpCurrent << "/" << partyMember.HpTotal << '\n';
+		if (!partyMember->isDead()) {
+			std::cout << "HP: " << partyMember->HpCurrent << "/" << partyMember->HpTotal << '\n';
 
-			std::cout << "Mana: " << partyMember.ManaCurrent << "/" << partyMember.ManaTotal << '\n';
+			std::cout << "Mana: " << partyMember->ManaCurrent << "/" << partyMember->ManaTotal << '\n';
 		}
 		else {
 			std::cout << " DEAD\n\n";
@@ -192,7 +192,7 @@ bool Battle::loop()
 }
 
 void Battle::enemyTurn(int attackerPosition) {
-	Enemy* currentEnemy = &(enemyParty[attackerPosition]);
+	Enemy* currentEnemy = enemyParty[attackerPosition];
 
 	std::string enemyName = currentEnemy->Name;
 
@@ -206,7 +206,7 @@ void Battle::enemyTurn(int attackerPosition) {
 
 	int targetSelector = rand() % party->PartyMembers.size();
 
-	Hero* heroTarget = &(party->PartyMembers[targetSelector]);
+	Hero* heroTarget = party->PartyMembers[targetSelector];
 
 	// Checking if the enemy isn't trying to attack a dead hero
 	while (invalidTarget) {
@@ -218,7 +218,7 @@ void Battle::enemyTurn(int attackerPosition) {
 
 		targetSelector = rand() % party->PartyMembers.size();
 
-		heroTarget = &(party->PartyMembers[targetSelector]);
+		heroTarget = party->PartyMembers[targetSelector];
 	}
 
 	int damage = currentEnemy->MeelePowerTotal * 5 - (int)(heroTarget->MeeleDefenseTotal);
@@ -255,13 +255,13 @@ void Battle::selectAction(int attackerPosition)
 
 	bool optionInvalid = true;
 
-	Hero* currentHero = &(party->PartyMembers[attackerPosition]);
+	Hero* currentHero = party->PartyMembers[attackerPosition];
 
 	std::string heroName = currentHero->Name;
 
 	// Battle option select
 	while (optionInvalid) {
-		std::cout << heroName << " turn!\n\nSelect your action:\n[1] Attack [2] Defend\n";
+		std::cout << heroName << " turn!\n\nSelect your action:\n[1] Attack [2] Spells [3] Deffend\n";
 
 		std::cin >> battleOption;
 
@@ -270,7 +270,17 @@ void Battle::selectAction(int attackerPosition)
 				optionInvalid = false;
 
 				break;
-			case 2: 
+			case 2:
+				std::cout << "Select a spell:\n";
+
+				std::cout << "([0] to go back)\n\n";
+
+				for (int spellId : currentHero->Spells) {
+					//GameDatabase
+				}
+
+				break;
+			case 3: 
 				std::cout << "Defend does nothing right now!" << '\n';
 
 				std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -315,7 +325,7 @@ void Battle::selectAction(int attackerPosition)
 			continue;
 		}
 
-		Enemy* selectedEnemy = &(enemyParty[inputEnemySelected]);
+		Enemy* selectedEnemy = enemyParty[inputEnemySelected];
 
 		std::string enemyName = selectedEnemy->Name;
 
@@ -334,12 +344,10 @@ void Battle::selectAction(int attackerPosition)
 		damage = damage < 0 ? 1 : damage;
 
 		FancyDialog("Attacking " + enemyName + "...", 10);
-		//std::cout << "Attacking " << enemyName << "..." << '\n' << '\n';
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
 		FancyDialog("Dealt " + std::to_string(damage) + " damage on " + enemyName + "!", 15);
-		//std::cout << "Dealt " << damage << " damage on " << enemyName << "!" << '\n' << '\n';
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
@@ -349,7 +357,6 @@ void Battle::selectAction(int attackerPosition)
 			std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
 			FancyDialog(heroName + " killed " + enemyName + "!", 15);
-			//std::cout << heroName << " killed " << enemyName << "!" << '\n';
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(999));
 		}
@@ -367,15 +374,15 @@ void Battle::sortAttackOrder()
 	std::vector<actorAttackOrder> actorsSpeedOrder;
 
 	for (int i = 0; i < party->PartyMembers.size(); i++) {
-		Hero currentHero = party->PartyMembers[i];
+		Hero* currentHero = party->PartyMembers[i];
 
-		actorsSpeedOrder.emplace_back(i, currentHero.SpeedTotal, typeOfActorEnum::hero, currentHero.isDead());
+		actorsSpeedOrder.emplace_back(i, currentHero->SpeedTotal, typeOfActorEnum::hero, currentHero->isDead());
 	}
 
 	for (int i = 0; i < enemyParty.size(); i++) {
-		Enemy currentEnemy = enemyParty[i];
+		Enemy* currentEnemy = enemyParty[i];
 
-		actorsSpeedOrder.emplace_back(i, currentEnemy.SpeedTotal, typeOfActorEnum::enemy, currentEnemy.isDead());
+		actorsSpeedOrder.emplace_back(i, currentEnemy->SpeedTotal, typeOfActorEnum::enemy, currentEnemy->isDead());
 	}
 
 	std::size_t actorSpeedSizes = actorsSpeedOrder.size();

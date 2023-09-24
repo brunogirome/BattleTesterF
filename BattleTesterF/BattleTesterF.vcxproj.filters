@@ -72,9 +72,6 @@
     <ClCompile Include="Battle.cpp">
       <Filter>Source Files\GameState</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyParty.cpp">
-      <Filter>Source Files\GameState</Filter>
-    </ClCompile>
     <ClCompile Include="FancyDialog.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
@@ -108,9 +105,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Battle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyParty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FancyDialog.h">

@@ -11,7 +11,7 @@ int main()
 
     game->init();
     
-    bool debug = true;
+    bool debug = false;
     if (debug) {
         game->GameDatabase->listHeroes();
 

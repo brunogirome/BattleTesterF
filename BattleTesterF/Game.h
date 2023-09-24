@@ -10,7 +10,7 @@
 class Game
 {
 public:
-	Party * GameParty;
+	Party* GameParty;
 
 	Database* GameDatabase;
 

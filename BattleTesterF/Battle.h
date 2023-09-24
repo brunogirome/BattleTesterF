@@ -2,6 +2,8 @@
 
 #include "Game.h"
 
+#include "SupportSpell.h"
+
 #include "FancyDialog.h"
 
 enum class typeOfActorEnum { hero, enemy };
@@ -21,7 +23,7 @@ private:
 
 	Party* party;
 
-	std::vector<Enemy> enemyParty;
+	std::vector<Enemy*> enemyParty;
 
 	std::vector<actorAttackOrder> attackOrder;
 

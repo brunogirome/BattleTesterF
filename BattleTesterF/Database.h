@@ -18,9 +18,9 @@ public:
 
 	std::vector<SupportSpell> SupportSpells;
 
-	Hero getAHero(int id);
+	Hero* getAHero(int id);
 
-	Enemy getAEnemy(int id);
+	Enemy* getAEnemy(int id);
 
 	SpellInterface* getASpell(int id);
 
