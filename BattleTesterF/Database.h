@@ -22,6 +22,8 @@ public:
 
 	Enemy* getAEnemy(int id);
 
+	SupportSpell* getASupportSpell(int id);
+
 	SpellInterface* getASpell(int id);
 
 	void listHeroes();

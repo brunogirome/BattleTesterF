@@ -23,6 +23,8 @@ private:
 
 	Party* party;
 
+	Database* database;
+
 	std::vector<Enemy*> enemyParty;
 
 	std::vector<actorAttackOrder> attackOrder;

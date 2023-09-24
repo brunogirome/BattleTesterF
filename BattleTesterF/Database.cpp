@@ -29,6 +29,15 @@ Enemy* Database::getAEnemy(int id)
     return &(Enemies[id - 1]);
 }
 
+SupportSpell* Database::getASupportSpell(int id)
+{
+    for (int i = 0; i < SupportSpells.size(); i++) {
+        if (SupportSpells[i].Id = id) {
+            return &(SupportSpells[i]);
+        }
+    }
+}
+
 void Database::listHeroes()
 {
     std::cout << "+---------------------------+" << '\n';

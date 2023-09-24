@@ -108,6 +108,8 @@ Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
 {
 	party = game->GameParty;
 
+	database = game->GameDatabase;
+
 	for (int i = 0; i < enemyPartyIds.size(); i++) {
 		enemyParty.push_back(game->GameDatabase->getAEnemy(enemyPartyIds[i]));
 	}
@@ -251,9 +253,9 @@ void Battle::enemyTurn(int attackerPosition) {
 
 void Battle::selectAction(int attackerPosition)
 {
-	int battleOption;
+	int battleOption = 0;
 
-	bool optionInvalid = true;
+	bool optionInvalid = true, firstExecution = true;
 
 	Hero* currentHero = party->PartyMembers[attackerPosition];
 
@@ -265,105 +267,197 @@ void Battle::selectAction(int attackerPosition)
 
 		std::cin >> battleOption;
 
-		switch (battleOption) {
-			case 1:
-				optionInvalid = false;
-
-				break;
-			case 2:
-				std::cout << "Select a spell:\n";
-
-				std::cout << "([0] to go back)\n\n";
-
-				for (int spellId : currentHero->Spells) {
-					//GameDatabase
-				}
-
-				break;
-			case 3: 
-				std::cout << "Defend does nothing right now!" << '\n';
-
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-
-				system("cls");
-
-				optionInvalid = false;
-				break;
-			default:
-				std::cout << "Invalid option!" << '\n';
-
-				std::this_thread::sleep_for(std::chrono::seconds(1));
-
-				system("cls");
-
-				break;
+		if (!firstExecution) {
+			printBattle();
 		}
-	}
 
-	system("cls");
+		optionInvalid = battleOption > 3 || battleOption < 1;
 
-	bool enemySelectedInvalid = true;
-
-	std::size_t inputEnemySelected;
-
-	while (enemySelectedInvalid && battleOption == 1) {
-		printBattle();
-
-		std::cout << "Select one enemy: ";
-
-		std::cin >> inputEnemySelected;
-
-		inputEnemySelected -= 1;
-
-		if (inputEnemySelected >= enemyParty.size() || inputEnemySelected < 0) {
-			std::cout << "Invalid input!";
+		if (optionInvalid) {
+			std::cout << "Invalid option!" << '\n';
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-
-			system("cls");
-
-			continue;
 		}
+		else {
 
-		Enemy* selectedEnemy = enemyParty[inputEnemySelected];
-
-		std::string enemyName = selectedEnemy->Name;
-
-		if (selectedEnemy->HpCurrent <= 0) {
-			std::cout << enemyName << " is dead, select another enemy!";
-
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-
-			system("cls");
-
-			continue;
-		}
-
-		int damage = currentHero->MeelePowerTotal - selectedEnemy->MeeleDefenseTotal;
-
-		damage = damage < 0 ? 1 : damage;
-
-		FancyDialog("Attacking " + enemyName + "...", 10);
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(333));
-
-		FancyDialog("Dealt " + std::to_string(damage) + " damage on " + enemyName + "!", 15);
-
-		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
-
-		selectedEnemy->HpCurrent -= damage;
-
-		if (selectedEnemy->isDead()) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(333));
-
-			FancyDialog(heroName + " killed " + enemyName + "!", 15);
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(999));
 		}
 
 		system("cls");
 
-		enemySelectedInvalid = false;
+		firstExecution = false;
+	}
+
+	// Executing option
+	switch (battleOption) {
+	case 1:
+	{
+		bool enemySelectedInvalid = true;
+
+		std::size_t inputEnemySelected;
+
+		while (enemySelectedInvalid) {
+
+		}
+	}
+		
+	}
+
+	// Spell variables
+	int selectedSpellPosition = 0;
+
+	std::vector<int> heroSpells = currentHero->Spells;
+
+	while (optionInvalid) {
+		std::cout << heroName << " turn!\n\nSelect your action:\n[1] Attack [2] Spells [3] Deffend\n";
+
+		std::cin >> battleOption;
+
+		if (!firstExecution) {
+			printBattle();
+		}
+
+		switch (battleOption) {
+		case 1:
+			optionInvalid = false;
+
+			break;
+		case 2:
+		{
+			bool invalidSpellOption = true;
+
+			while (invalidSpellOption) {
+				std::cout << "Select a spell:\n";
+
+				std::cout << "([0] to go back)\n\n";
+
+				for (int i = 0; i < heroSpells.size(); i++) {
+					SpellInterface* displaySpell = database->getASpell(heroSpells[i]);
+
+					std::cout << "[" << (i + 1) << "] " << displaySpell->Name << ": " << displaySpell->Description << '\n';
+				}
+
+				std::cin >> selectedSpellPosition;
+
+				if (selectedSpellPosition == 0) {
+					optionInvalid = false;
+
+					invalidSpellOption = false;
+
+					continue;
+				}
+				else if (selectedSpellPosition > heroSpells.size()) {
+					std::cout << "Invalid input!\n";
+
+					std::this_thread::sleep_for(std::chrono::seconds(1));
+
+					continue;
+				}
+
+				invalidSpellOption = false;
+			}
+
+			break;
+		}
+		case 3: 
+		{
+
+		}
+		default:
+
+		}
+
+		firstExecution = false;
+	}
+
+	switch (battleOption) {
+	case 1:
+		system("cls");
+
+		
+
+		
+
+		while (enemySelectedInvalid && battleOption == 1) {
+			printBattle();
+
+			std::cout << "Select one enemy: ";
+
+			std::cin >> inputEnemySelected;
+
+			inputEnemySelected -= 1;
+
+			if (inputEnemySelected >= enemyParty.size() || inputEnemySelected < 0) {
+				std::cout << "Invalid input!";
+
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+
+				system("cls");
+
+				continue;
+			}
+
+			Enemy* selectedEnemy = enemyParty[inputEnemySelected];
+
+			std::string enemyName = selectedEnemy->Name;
+
+			if (selectedEnemy->HpCurrent <= 0) {
+				std::cout << enemyName << " is dead, select another enemy!";
+
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+
+				system("cls");
+
+				continue;
+			}
+
+			int damage = currentHero->MeelePowerTotal - selectedEnemy->MeeleDefenseTotal;
+
+			damage = damage < 0 ? 1 : damage;
+
+			FancyDialog("Attacking " + enemyName + "...", 10);
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+			FancyDialog("Dealt " + std::to_string(damage) + " damage on " + enemyName + "!", 15);
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(1200));
+
+			selectedEnemy->HpCurrent -= damage;
+
+			if (selectedEnemy->isDead()) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+				FancyDialog(heroName + " killed " + enemyName + "!", 15);
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(999));
+			}
+
+			system("cls");
+
+			enemySelectedInvalid = false;
+		}
+		break;
+	case 2:
+		SpellInterface * selectedSpell = database->getASpell(heroSpells[selectedSpellPosition - 1]);
+
+		switch (selectedSpell->SpellType) {
+		case SpellTypesEnum::DAMAGE:
+			break;
+		case SpellTypesEnum::BUFF:
+			break;
+		case SpellTypesEnum::SUPPORT:
+			SupportSpell* supportSpell = database->getASupportSpell(selectedSpell->Id);
+
+			FancyDialog("Casted " + supportSpell->Name + "!\n", 10);
+
+			break;
+		}
+
+		optionInvalid = false;
+
+		system("cls");
+
+		break;
 	}
 
 	sortAttackOrder();
