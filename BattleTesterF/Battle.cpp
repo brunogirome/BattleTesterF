@@ -33,6 +33,8 @@ void Battle::start()
 				this->heroAttackingScreen();
 				
 				this->manageSupportBuffs();
+
+				this->currentAttackerPointer++;
 				
 				this->setNextState();
 
@@ -45,6 +47,8 @@ void Battle::start()
 				this->castSpellScreen();
 
 				this->manageSupportBuffs();
+
+				this->currentAttackerPointer++;
 
 				this->setNextState();
 				break;
@@ -96,24 +100,13 @@ void Battle::setNextState()
 	// Check if VICTORY
 	bool aliveEnemy = false;
 
-
-	for (int i = 0; i < enemyParty.size(); i++) {
-		Enemy* enemy = &(enemyParty[i]);
-
-		if (!enemy->isDead()) {
-			aliveEnemy = true;
-
-			break;
-		}
-	}
-
-	/*for (Enemy& enemy : enemyParty) {
+	for (Enemy& enemy : enemyParty) {
 		if (!enemy.isDead()) {
 			aliveEnemy = true;
 
 			break;
 		}
-	}*/
+	}
 
 	if (!aliveEnemy) {
 		this->battleState = VICTORY;
@@ -313,12 +306,9 @@ void Battle::selectEnemyScreen()
 
 void Battle::heroAttackingScreen()
 {
+	this->printBattle();
+
 	this->calculatePhysicalDamage(currentHero, currentEnemy);
-}
-
-void Battle::setNextAttacker()
-{
-
 }
 
 void Battle::manageSupportBuffs() 
@@ -421,6 +411,8 @@ void Battle::selectSpellScreen()
 
 void Battle::castSpellScreen() 
 {
+	this->printBattle();
+
 	switch (selectedSpell->SpellType) {
 	case BUFF:
 	{
@@ -455,6 +447,8 @@ void Battle::castSpellScreen()
 
 void Battle::deffendingScreen() 
 {
+	this->printBattle();
+
 	// TODO deffend logic
 	std::cout << "Deffeding does nothing right now!";
 
@@ -463,6 +457,8 @@ void Battle::deffendingScreen()
 
 void Battle::escapingScreen()
 {
+	this->printBattle();
+
 	// TODO escape logic
 	std::cout << "You can't escape right now!";
 
