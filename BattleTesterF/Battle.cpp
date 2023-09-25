@@ -55,7 +55,15 @@ void Battle::start()
 
 			this->setNextState();
 			break;
+		case ESCAPING:
+			this->escapingScreen();
+
+			this->manageSupportBuffs();
+
+			this->setNextState();
+			break;
 		}
+
 	}
 }
 
