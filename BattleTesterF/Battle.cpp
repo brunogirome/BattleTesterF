@@ -430,7 +430,7 @@ void Battle::castSpellScreen()
 		}
 
 		// If not, add it to the acrtiveSupportBuffs vector
-		activeSupportBuffs.emplace_back(supportSpell->SupportBuff, (supportSpell->Rounds + 1));
+		activeSupportBuffs.emplace_back(supportSpell->SupportBuff, supportSpell->Rounds + 1);
 
 		break;
 	}
