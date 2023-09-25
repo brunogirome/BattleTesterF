@@ -51,6 +51,17 @@ void Battle::start()
 				this->currentAttackerPointer++;
 
 				this->setNextState();
+
+				break;
+			case ENEMY_TURN:
+				this->enemyTurnScreen();
+
+				this->manageSupportBuffs();
+
+				this->currentAttackerPointer++;
+
+				this->setNextState();
+
 				break;
 			case DEFFENDING:
 				this->deffendingScreen();
@@ -518,6 +529,8 @@ void Battle::printBattle()
 
 void Battle::enemyTurnScreen() 
 {
+	this->printBattle();
+
 	std::string enemyName = this->currentEnemy->Name;
 
 	std::cout << enemyName << " turn!\n";
@@ -540,8 +553,6 @@ void Battle::enemyTurnScreen()
 
 		heroTarget = party[targetSelector];
 	}
-
-	this->printBattle();
 
 	this->calculatePhysicalDamage(currentEnemy, heroTarget);
 }
