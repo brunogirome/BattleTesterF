@@ -7,35 +7,42 @@ Database::Database()
     loadEnemiesFromDatabase();
 
     loadSpellsFromDatabase();
-
 }
 
-SpellInterface* Database::getASpell(int id)
+SpellInterface *Database::getASpell(int id)
 {
-    for (int i = 0; i < SupportSpells.size(); i++) {
-        if (SupportSpells[i].Id = id) {
+    for (int i = 0; i < SupportSpells.size(); i++)
+    {
+        if (SupportSpells[i].Id = id)
+        {
             return &(SupportSpells[i]);
         }
     }
 }
 
-Hero* Database::getAHero(int id)
+Hero *Database::getAHero(int id)
 {
     return &(Heroes[id - 1]);
 }
 
-Enemy* Database::getAEnemy(int id)
+Enemy *Database::getAEnemy(int id)
 {
     return &(Enemies[id - 1]);
 }
 
-SupportSpell* Database::getASupportSpell(int id)
+SupportSpell *Database::getASupportSpell(SpellInterface *spell)
 {
-    for (int i = 0; i < SupportSpells.size(); i++) {
-        if (SupportSpells[i].Id = id) {
+    int id = spell->Id;
+
+    for (int i = 0; i < SupportSpells.size(); i++)
+    {
+        if (SupportSpells[i].Id = id)
+        {
             return &(SupportSpells[i]);
         }
     }
+
+    delete (spell);
 }
 
 void Database::listHeroes()
@@ -44,7 +51,8 @@ void Database::listHeroes()
     std::cout << "| Display all Heroes        |" << '\n';
     std::cout << "+---------------------------+" << '\n';
 
-    for (int i = 0; i < Heroes.size(); i++) {
+    for (int i = 0; i < Heroes.size(); i++)
+    {
         std::cout << "id: " << Heroes[i].Id << '\n';
         std::cout << "name: " << Heroes[i].Name << '\n';
         std::cout << "combatType: " << Heroes[i].CombatType << '\n';
@@ -72,13 +80,15 @@ void Database::listHeroes()
         std::cout << "magicDefenseTotal: " << Heroes[i].MagicDefenseTotal << '\n';
         std::cout << "--------spells--------" << '\n';
 
-        for (int spellId : Heroes[i].Spells) {
-            SpellInterface* spell = getASpell(spellId);
+        for (int spellId : Heroes[i].Spells)
+        {
+            SpellInterface *spell = getASpell(spellId);
 
             std::cout << "Id: " << spell->Id << "| Name: " << spell->Name << "| Type: " << spell->SpellType << '\n';
         }
 
-        std::cout << "-------------------------------" << '\n' << '\n';
+        std::cout << "-------------------------------" << '\n'
+                  << '\n';
     }
 }
 
@@ -88,7 +98,8 @@ void Database::listEnemies()
     std::cout << "| Display all Enemies       |" << '\n';
     std::cout << "+---------------------------+" << '\n';
 
-    for (int i = 0; i < Enemies.size(); i++) {
+    for (int i = 0; i < Enemies.size(); i++)
+    {
         std::cout << "id: " << Enemies[i].Id << '\n';
         std::cout << "name: " << Enemies[i].Name << '\n';
         std::cout << "combatType: " << Enemies[i].CombatType << '\n';
@@ -114,15 +125,17 @@ void Database::listEnemies()
         std::cout << "magicPowerTotal: " << Enemies[i].MagicPowerTotal << '\n';
         std::cout << "meeleDefenseTotal: " << Enemies[i].MeeleDefenseTotal << '\n';
         std::cout << "magicDefenseTotal: " << Enemies[i].MagicDefenseTotal << '\n';
-        std::cout << "-------------------------------" << '\n' << '\n';
+        std::cout << "-------------------------------" << '\n'
+                  << '\n';
     }
 }
 
 void Database::loadSpellsFromDatabase()
 {
-    sqlite3* database = connect();
+    sqlite3 *database = connect();
 
-    if (database == NULL) {
+    if (database == NULL)
+    {
         return;
     }
 
@@ -136,15 +149,16 @@ void Database::loadSpellsFromDatabase()
 
     SpellTypesEnum spellType;
 
-    PartyBuffsEnum partyBuff;
+    SupportBuffsEnum supportBuff;
 
     float multiplier;
 
     ElementsEnum element;
 
-    sqlite3_stmt* statement;
+    sqlite3_stmt *statement;
 
-    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK) {
+    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK)
+    {
         std::cout << "Error while executing the query: " << query << '\n';
 
         disconnect(statement);
@@ -152,20 +166,23 @@ void Database::loadSpellsFromDatabase()
         return;
     }
 
-    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW) {
+    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW)
+    {
         id = sqlite3_column_int(statement, 0);
 
-        name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 1)));
+        name = std::string(reinterpret_cast<const char *>(sqlite3_column_text(statement, 1)));
 
-        description = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 2)));
+        description = std::string(reinterpret_cast<const char *>(sqlite3_column_text(statement, 2)));
 
         spellType = (SpellTypesEnum)sqlite3_column_int(statement, 3);
 
-        if (spellType == SpellTypesEnum::BUFF || spellType == SpellTypesEnum::SUPPORT) {
+        if (spellType == SpellTypesEnum::BUFF || spellType == SpellTypesEnum::SUPPORT)
+        {
             rounds = sqlite3_column_int(statement, 5);
         }
 
-        switch (spellType) {
+        switch (spellType)
+        {
         case SpellTypesEnum::BUFF:
             break;
         case SpellTypesEnum::DAMAGE:
@@ -173,22 +190,22 @@ void Database::loadSpellsFromDatabase()
 
             break;
         case SpellTypesEnum::SUPPORT:
-            partyBuff = (PartyBuffsEnum)sqlite3_column_int(statement, 4);
+            supportBuff = (SupportBuffsEnum)sqlite3_column_int(statement, 4);
 
-            SupportSpells.emplace_back(id, name, description, spellType, rounds, partyBuff);
+            SupportSpells.emplace_back(id, name, description, spellType, rounds, supportBuff);
             break;
         }
     }
 
     disconnect(statement);
-
 }
 
 void Database::loadHeroesFromDatabase()
 {
-    sqlite3* database = connect();
+    sqlite3 *database = connect();
 
-    if (database == NULL) {
+    if (database == NULL)
+    {
         return;
     }
 
@@ -196,7 +213,7 @@ void Database::loadHeroesFromDatabase()
 
     std::string query = "SELECT * FROM Heroes;";
 
-    int id, strength, agility, intelligence, hpBase, manaBase, speedBase, 
+    int id, strength, agility, intelligence, hpBase, manaBase, speedBase,
         evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase;
 
     CombatTypesEnum combatType;
@@ -205,9 +222,10 @@ void Database::loadHeroesFromDatabase()
 
     std::string name;
 
-    sqlite3_stmt* statement;
+    sqlite3_stmt *statement;
 
-    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK) {
+    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK)
+    {
         std::cout << "Error while executing the query: " << query << '\n';
 
         disconnect(statement);
@@ -215,9 +233,10 @@ void Database::loadHeroesFromDatabase()
         return;
     }
 
-    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW) {
+    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW)
+    {
         id = sqlite3_column_int(statement, 0);
-        name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 1)));
+        name = std::string(reinterpret_cast<const char *>(sqlite3_column_text(statement, 1)));
         combatType = (CombatTypesEnum)sqlite3_column_int(statement, 2);
         element = (ElementsEnum)sqlite3_column_int(statement, 3);
         strength = sqlite3_column_int(statement, 4);
@@ -233,7 +252,7 @@ void Database::loadHeroesFromDatabase()
         meeleDefenseBase = sqlite3_column_int(statement, 14);
         magicDefenseBase = sqlite3_column_int(statement, 15);
 
-        sqlite3_stmt* statementSpells;
+        sqlite3_stmt *statementSpells;
 
         int ret_codeSpells = 0;
 
@@ -243,7 +262,8 @@ void Database::loadHeroesFromDatabase()
 
         std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
 
-        if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK) {
+        if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK)
+        {
             std::cout << "Error while executing the query: " << query << '\n';
 
             disconnect(statementSpells);
@@ -251,7 +271,8 @@ void Database::loadHeroesFromDatabase()
             return;
         }
 
-        while ((ret_codeSpells = sqlite3_step(statementSpells)) == SQLITE_ROW) {
+        while ((ret_codeSpells = sqlite3_step(statementSpells)) == SQLITE_ROW)
+        {
             spellId = sqlite3_column_int(statementSpells, 0);
 
             heroSpells.emplace_back(spellId);
@@ -260,7 +281,7 @@ void Database::loadHeroesFromDatabase()
         disconnect(statementSpells);
 
         Heroes.emplace_back(id, name, combatType, element, strength, agility, intelligence, hpBase, manaBase, speedBase,
-            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, heroSpells);
+                            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, heroSpells);
     }
 
     disconnect(statement);
@@ -268,9 +289,10 @@ void Database::loadHeroesFromDatabase()
 
 void Database::loadEnemiesFromDatabase()
 {
-    sqlite3* database = connect();
+    sqlite3 *database = connect();
 
-    if (database == NULL) {
+    if (database == NULL)
+    {
         return;
     }
 
@@ -287,9 +309,10 @@ void Database::loadEnemiesFromDatabase()
 
     std::string name;
 
-    sqlite3_stmt* statement;
+    sqlite3_stmt *statement;
 
-    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK) {
+    if (sqlite3_prepare_v2(database, query.c_str(), -1, &statement, NULL) != SQLITE_OK)
+    {
         std::cout << "Error while executing the query: " << query << '\n';
 
         disconnect(statement);
@@ -299,9 +322,10 @@ void Database::loadEnemiesFromDatabase()
 
     std::vector<int> enemySpells = {};
 
-    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW) {
+    while ((ret_code = sqlite3_step(statement)) == SQLITE_ROW)
+    {
         id = sqlite3_column_int(statement, 0);
-        name = std::string(reinterpret_cast<const char*>(sqlite3_column_text(statement, 1)));
+        name = std::string(reinterpret_cast<const char *>(sqlite3_column_text(statement, 1)));
         combatType = (CombatTypesEnum)sqlite3_column_int(statement, 2);
         element = (ElementsEnum)sqlite3_column_int(statement, 3);
         strength = sqlite3_column_int(statement, 4);
@@ -318,7 +342,7 @@ void Database::loadEnemiesFromDatabase()
         magicDefenseBase = sqlite3_column_int(statement, 15);
 
         Enemies.emplace_back(id, name, combatType, element, strength, agility, intelligence, hpBase, manaBase, speedBase,
-            evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, enemySpells);
+                             evasionBase, staminaBase, meelePowerBase, magicPowerBase, meeleDefenseBase, magicDefenseBase, enemySpells);
     }
 
     disconnect(statement);

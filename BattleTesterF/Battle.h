@@ -6,11 +6,20 @@
 
 #include "FancyDialog.h"
 
-enum class typeOfActorEnum { hero, enemy };
+enum typeOfActorEnum { HERO, ENEMY };
+
+enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, HERO_ATTACKING, ENEMY_ATTACKING, SPELL_SELECTION, SPELL_CASTING, VICTORY, DEFEAT };
 
 class Battle
 {
 private:
+	std::vector<Hero*> party;
+
+	Database* database;
+
+	std::vector<Enemy*> enemyParty;
+
+	// Round management
 	class actorAttackOrder {
 	public:
 		int Position;
@@ -21,13 +30,44 @@ private:
 		actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor, bool isDead);
 	};
 
-	Party* party;
+	class activeSupportBuff {
+	public:
+		SupportBuffsEnum SupportBuff;
+		int ReamaningRounds;
 
-	Database* database;
+		activeSupportBuff(SupportBuffsEnum supportBuff, int reamaningRounds);
 
-	std::vector<Enemy*> enemyParty;
+		bool expired();
+	};
+
+	std::vector<activeSupportBuff*> activeSupportBuffs;
+
+	std::size_t currentAttackerPointer;
+
+	std::size_t roundSize;
 
 	std::vector<actorAttackOrder> attackOrder;
+
+	actorAttackOrder* currentAttacker;
+
+	void setNextAttacker();
+
+	// Battle State management			
+	battleStateEnum battleState;
+
+	void setNextState();
+
+	void startingScreen();
+
+	void selectActionScreen();
+
+	// Utils
+	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);
+
+	void castSupportSpell(SupportSpell* spell, Hero* hero);
+
+	// Support spells activation
+	// ------------
 
 	int currentRound;
 

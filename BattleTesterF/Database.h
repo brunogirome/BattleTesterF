@@ -22,7 +22,7 @@ public:
 
 	Enemy* getAEnemy(int id);
 
-	SupportSpell* getASupportSpell(int id);
+	SupportSpell* getASupportSpell(SpellInterface* spell);
 
 	SpellInterface* getASpell(int id);
 

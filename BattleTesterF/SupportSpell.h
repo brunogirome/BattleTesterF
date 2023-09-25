@@ -2,17 +2,16 @@
 
 #include "SpellInterface.h"
 
-#include "PartyBuffsEnum.h"
+#include "SupportBuffsEnum.h"
 
 #include <string>
 
-class SupportSpell: public SpellInterface
+class SupportSpell : public SpellInterface
 {
 public:
 	int Rounds;
 
-	PartyBuffsEnum PartyBuff;
+	SupportBuffsEnum SupportBuff;
 
-	SupportSpell(int id, std::string name, std::string description, SpellTypesEnum spellType, int rounds, PartyBuffsEnum partyBuff);
+	SupportSpell(int id, std::string name, std::string description, SpellTypesEnum spellType, int rounds, SupportBuffsEnum supportBuff);
 };
-
