@@ -54,7 +54,7 @@ private:
 
 	void setNextAttacker();
 
-	// Battle State management
+	// Battle State management/screens
 	Enemy* selectedEnemy;
 
 	Hero* currentHero;
@@ -86,24 +86,14 @@ private:
 	// Utils
 	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);
 
-	// Support spells activation
-	// ------------
-
 	int currentRound;
+
+	// Aux render functions
+	void printBattle();
 
 	std::string getLine(int size, std::string character = "-");
 
-	bool loop();
-
 	void drawLine(int size, bool border = false);
-
-	void sortAttackOrder();
-
-	void selectAction(int attackerPosition);
-
-	void enemyTurn(int attackerPosition);
-
-	void printBattle();
 public:
 	Battle(Game* game, std::vector<int> enemyPartyIds);
 
