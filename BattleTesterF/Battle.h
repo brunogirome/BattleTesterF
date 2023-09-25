@@ -42,6 +42,8 @@ private:
 
 	std::vector<activeSupportBuff*> activeSupportBuffs;
 
+	void manageSupportBuffs();
+
 	std::size_t currentAttackerPointer;
 
 	std::size_t roundSize;

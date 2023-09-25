@@ -18,6 +18,8 @@ void Battle::start()
 			this->startingScreen();
 			break;
 		case SELECT_ACTION:
+			this->manageSupportBuffs();
+
 			this->selectActionScreen();
 			break;
 		}
@@ -397,6 +399,29 @@ void Battle::printBattle()
 	drawLine(59);
 
 	std::cout << uiLines;
+}
+
+void Battle::manageSupportBuffs() 
+{
+	std::vector<int> positionsToRemove;
+
+	for (int i = 0; i < this->activeSupportBuffs.size(); i++) {
+		activeSupportBuff* activeBuff = this->activeSupportBuffs[i];
+
+		activeBuff->ReamaningRounds--;
+
+		if (activeBuff->expired()) {
+			positionsToRemove.push_back(i);
+		}
+	}
+
+	if (positionsToRemove.size() == 0) {
+		return;
+	}
+
+	for (int position : positionsToRemove) {
+		this->activeSupportBuffs.erase(activeSupportBuffs.begin() - 1 + position);
+	}
 }
 
 void Battle::calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor) {
@@ -802,8 +827,6 @@ void Battle::selectAction(int attackerPosition)
 
 	sortAttackOrder();
 }
-
-
 
 Battle::actorAttackOrder::actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor, bool isDead)
 {
