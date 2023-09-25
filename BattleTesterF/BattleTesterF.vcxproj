@@ -155,7 +155,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Party.h" />
-    <ClInclude Include="PartyBuffsEnum.h" />
+    <ClInclude Include="SupportBuffsEnum.h" />
     <ClInclude Include="SpellInterface.h" />
     <ClInclude Include="SupportSpell.h" />
   </ItemGroup>

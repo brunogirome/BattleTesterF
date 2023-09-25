@@ -106,7 +106,7 @@ void Battle::setNextState()
 	// Check the next attacker to set SELECT_ACTION or ENEMY_ATTACKING
 	this->setNextAttacker();
 
-	this->battleState = this->currentAttacker->TypeOfActor == HERO ? SELECT_ACTION : ENEMY_ATTACKING;
+	this->battleState = this->currentAttacker->TypeOfActor == HERO ? SELECT_ACTION : ENEMY_TURN;
 }
 
 void Battle::startingScreen()
@@ -115,7 +115,7 @@ void Battle::startingScreen()
 
 	std::string auxHeroName, auxEnemyName, auxVersus;
 
-	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party->PartyMembers.size();
+	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party.size();
 
 	int biggestParty = enemyPartySize >= partySize ? enemyPartySize : partySize;
 
@@ -129,7 +129,7 @@ void Battle::startingScreen()
 
 		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i]->Name : "\t\t";
 
-		auxHeroName = i < partySize ? party->PartyMembers[i]->Name : "";
+		auxHeroName = i < partySize ? party[i]->Name : "";
 
 		battleStartHeader += auxEnemyName + auxVersus + auxHeroName + "\n\n";
 	}
@@ -430,7 +430,7 @@ void Battle::castSpellScreen()
 		}
 
 		// If not, add it to the acrtiveSupportBuffs vector
-		activeSupportBuffs.emplace_back(supportSpell->SupportBuff, supportSpell->Rounds + 1);
+		activeSupportBuffs.emplace_back(supportSpell->SupportBuff, (supportSpell->Rounds + 1));
 
 		break;
 	}

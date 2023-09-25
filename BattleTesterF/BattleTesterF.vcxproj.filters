@@ -113,7 +113,7 @@
     <ClInclude Include="SpellInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PartyBuffsEnum.h">
+    <ClInclude Include="SupportBuffsEnum.h">
       <Filter>Source Files\Enums</Filter>
     </ClInclude>
     <ClInclude Include="BuffTypesEnum.h">
