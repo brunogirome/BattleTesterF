@@ -19,51 +19,50 @@ void Battle::start()
 
 			this->setNextState();
 			break;
-		case SELECT_ACTION:
-			this->currentHero = this->party[this->currentAttacker->Position];
+			case SELECT_ACTION:
+				this->currentHero = this->party[this->currentAttacker->Position];
 
-			this->selectActionScreen();
+				this->selectActionScreen();
 
-			break;
-		case ENEMY_SELECTION:
-			this->selectEnemyScreen();
+				break;
+			case ENEMY_SELECTION:
+				this->selectEnemyScreen();
 
-			break;
-		case HERO_ATTACKING:
-			this->heroAttackingScreen();
-			
-			this->manageSupportBuffs();
-			
-			this->setNextState();
+				break;
+			case HERO_ATTACKING:
+				this->heroAttackingScreen();
+				
+				this->manageSupportBuffs();
+				
+				this->setNextState();
 
-			break;
-		case SPELL_SELECTION:
-			this->selectSpellScreen();
+				break;
+			case SPELL_SELECTION:
+				this->selectSpellScreen();
 
-			break;
-		case SPELL_CASTING:
-			this->castSpellScreen();
+				break;
+			case SPELL_CASTING:
+				this->castSpellScreen();
 
-			this->manageSupportBuffs();
+				this->manageSupportBuffs();
 
-			this->setNextState();
-			break;
-		case DEFFENDING:
-			this->deffendingScreen();
+				this->setNextState();
+				break;
+			case DEFFENDING:
+				this->deffendingScreen();
 
-			this->manageSupportBuffs();
+				this->manageSupportBuffs();
 
-			this->setNextState();
-			break;
-		case ESCAPING:
-			this->escapingScreen();
+				this->setNextState();
+				break;
+			case ESCAPING:
+				this->escapingScreen();
 
-			this->manageSupportBuffs();
+				this->manageSupportBuffs();
 
-			this->setNextState();
-			break;
+				this->setNextState();
+				break;
 		}
-
 	}
 }
 

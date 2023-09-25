@@ -4,8 +4,6 @@
 
 class Enemy : public CombatActorInterface {
 public:
-	int XpDrop = 1;
-
 	Enemy(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element,
 		int strength, int agility, int intelligence,
 		int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase,

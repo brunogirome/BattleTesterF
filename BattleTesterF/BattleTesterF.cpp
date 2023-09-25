@@ -5,8 +5,6 @@
 
 int main()
 {
-    std::string input;
-
     Game* game = new Game();
 
     game->init();
