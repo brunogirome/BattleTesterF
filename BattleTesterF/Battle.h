@@ -8,7 +8,7 @@
 
 enum typeOfActorEnum { HERO, ENEMY };
 
-enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, HERO_ATTACKING, ENEMY_ATTACKING, SPELL_SELECTION, SPELL_CASTING, VICTORY, DEFEAT };
+enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, HERO_ATTACKING, SPELL_SELECTION, SPELL_CASTING, ENEMY_ATTACKING, DEFFENDING, ESCAPING, VICTORY, DEFEAT };
 
 class Battle
 {
@@ -54,7 +54,13 @@ private:
 
 	void setNextAttacker();
 
-	// Battle State management			
+	// Battle State management
+	Enemy* selectedEnemy;
+
+	Hero* currentHero;
+
+	SpellInterface* selectedSpell;
+	
 	battleStateEnum battleState;
 
 	void setNextState();
@@ -62,6 +68,14 @@ private:
 	void startingScreen();
 
 	void selectActionScreen();
+
+	void selectEnemyScreen();
+
+	void heroAttackingScreen();
+
+	void selectSpellScreen();
+
+	void castSpellScreen();
 
 	// Utils
 	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);

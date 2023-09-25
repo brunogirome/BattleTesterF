@@ -41,8 +41,6 @@ SupportSpell *Database::getASupportSpell(SpellInterface *spell)
             return &(SupportSpells[i]);
         }
     }
-
-    delete (spell);
 }
 
 void Database::listHeroes()

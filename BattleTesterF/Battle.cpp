@@ -16,33 +16,40 @@ void Battle::start()
 		switch (this->battleState) {
 		case STARTING:
 			this->startingScreen();
+
+			this->setNextState();
 			break;
 		case SELECT_ACTION:
-			this->manageSupportBuffs();
+			this->currentHero = this->party[this->currentAttacker->Position];
 
 			this->selectActionScreen();
+
+			break;
+		case ENEMY_SELECTION:
+			this->selectEnemyScreen();
+
+			break;
+		case HERO_ATTACKING:
+			this->heroAttackingScreen();
+			
+			this->manageSupportBuffs();
+			
+			this->setNextState();
+
+			break;
+		case SPELL_SELECTION:
+			this->selectSpellScreen();
+
+			break;
+		case SPELL_CASTING:
+			this->castSpellScreen();
+
+			this->manageSupportBuffs();
+
+			this->setNextState();
 			break;
 		}
 	}
-
-	std::cout << "Combat started!" << '\n';
-
-	std::string finalMessage;
-
-	if (loop()) {
-		finalMessage = "VICTORY!\n\n";
-	}
-	else {
-		finalMessage = "GAME OVER...\n\n";
-	}
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(1200));
-
-	system("cls");
-
-	std::cout << '\n' << '\n' << "\t\t" << finalMessage;
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(888));
 }
 
 void Battle::setNextState()
@@ -114,9 +121,7 @@ void Battle::startingScreen()
 
 	std::cout << battleStartHeader;
 
-	std::this_thread::sleep_for(std::chrono::seconds(1));
-	
-	setNextState();
+	std::this_thread::sleep_for(std::chrono::seconds(1));	
 }
 
 void Battle::selectActionScreen() 
@@ -124,8 +129,6 @@ void Battle::selectActionScreen()
 	bool validChoice = false, firstExecutuion = true;
 
 	int selectedAction;
-
-	Hero* currentHero = this->party[this->currentAttacker->Position];
 
 	std::string heroName = currentHero->Name;
 
@@ -146,118 +149,13 @@ void Battle::selectActionScreen()
 		{
 		case 1: 
 		{
-			int inputEnemySelected;
-
-			bool validEnemyOption = false;
-
-			while (!validEnemyOption) {
-				system("cls");
-
-				this->printBattle();
-
-				FancyDialog("Select one enemy (0 cancel): ", 2);
-
-				std::cin >> inputEnemySelected;
-
-				if (inputEnemySelected == 0) {
-					validEnemyOption = true;
-
-					break;
-				}
-
-				inputEnemySelected -= 1;
-
-				if (inputEnemySelected >= enemyParty.size() || inputEnemySelected < 0) {
-					std::cout << "Invalid input!";
-
-					std::this_thread::sleep_for(std::chrono::seconds(1));
-
-					continue;
-				}
-
-				Enemy* selectedEnemy = enemyParty[inputEnemySelected];
-
-				std::string enemyName = selectedEnemy->Name;
-
-				if (selectedEnemy->HpCurrent <= 0) {
-					std::cout << enemyName << " is dead, select another enemy!";
-
-					std::this_thread::sleep_for(std::chrono::seconds(1));
-
-					continue;
-				}
-
-				this->calculatePhysicalDamage(currentHero, selectedEnemy);
-				
-				validEnemyOption = true;
-			}
+			this->battleState = HERO_ATTACKING;
 
 			validChoice = true;
-
-			break;
 		}
 		case 2:
 		{
-			std::vector<int> heroSpells = currentHero->Spells;
-
-			bool validSpellOption = false;
-
-			int inputSpellSelect;
-
-			while (!validSpellOption) {
-				system("cls");
-
-				this->printBattle();
-
-				FancyDialog("Select a spell to cast (0 return):", 2);
-
-				std::cin >> inputSpellSelect;
-
-				for (int i = 0; i < heroSpells.size(); i++) {
-					SpellInterface* spell = this->database->getASpell(heroSpells[i]);
-
-					std::cout << "[" << i + 1 << "] " << spell->Name << " | " << spell->Description << '\n';
-				}
-
-				if (inputSpellSelect == 0) {
-					validSpellOption = true;
-
-					break;
-				}
-
-				inputSpellSelect -= 1;
-
-				if (inputSpellSelect >= enemyParty.size() || inputSpellSelect < 0) {
-					std::cout << "Invalid input!";
-
-					std::this_thread::sleep_for(std::chrono::seconds(1));
-
-					continue;
-				}
-
-				SpellInterface* spell = this->database->getASpell(heroSpells[inputSpellSelect]);
-
-				switch (spell->SpellType) {
-				case BUFF: 
-				{
-
-				}
-				case DAMAGE:
-				{
-
-				}
-				case SUPPORT: 
-				{
-					SupportSpell* supportSpell = this->database->getASupportSpell(spell);
-
-					castSupportSpell(supportSpell, currentHero);
-
-					break;
-				}
-				}
-
-				validSpellOption = true;
-			}
+			this->battleState = SPELL_SELECTION;
 
 			validChoice = true;
 
@@ -297,6 +195,62 @@ void Battle::selectActionScreen()
 		
 		firstExecutuion = false;
 	}
+}
+
+void Battle::selectEnemyScreen()
+{
+	int inputEnemySelected;
+
+	bool validEnemyOption = false;
+
+	while (!validEnemyOption) {
+		system("cls");
+
+		this->printBattle();
+
+		FancyDialog("Select one enemy (0 cancel): ", 2);
+
+		std::cin >> inputEnemySelected;
+
+		if (inputEnemySelected == 0) {
+			this->battleState = SELECT_ACTION;
+
+			validEnemyOption = true;
+
+			return;
+		}
+
+		inputEnemySelected -= 1;
+
+		if (inputEnemySelected >= enemyParty.size() || inputEnemySelected < 0) {
+			std::cout << "Invalid input!";
+
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+
+			continue;
+		}
+
+		this->selectedEnemy = enemyParty[inputEnemySelected];
+
+		std::string enemyName = selectedEnemy->Name;
+
+		if (selectedEnemy->HpCurrent <= 0) {
+			std::cout << enemyName << " is dead, select another enemy!";
+
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+
+			continue;
+		}
+
+		validEnemyOption = true;
+	}
+
+	this->battleState = HERO_ATTACKING;
+}
+
+void Battle::heroAttackingScreen()
+{
+	this->calculatePhysicalDamage(currentHero, selectedEnemy);
 }
 
 void Battle::setNextAttacker()
@@ -350,57 +304,6 @@ void Battle::setNextAttacker()
 	}
 }
 
-void Battle::printBattle()
-{
-	std::string uiLines = "";
-
-	std::string auxNameEnemy, auxHeroName;
-
-	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party->PartyMembers.size();
-
-	drawLine(59);
-
-	std::cout << "Enemy line: " << '\n';
-
-	drawLine(59);
-
-	for (int i = 0; i < enemyPartySize; i++) {
-		Enemy* currentEnemy = enemyParty[i];
-
-		std::cout << "[" << i + 1 << "] " << currentEnemy->Name;
-
-		if (!currentEnemy->isDead()) {
-			std::cout << " HP: ??/??" << '\n';
-		}
-		else {
-			std::cout << " DEAD" << '\n';
-		}
-	}
-
-	std::cout << '\n' << "Your team:" << '\n';
-
-	drawLine(59);
-
-	for (int i = 0; i < partySize; i++) {
-		Hero* partyMember = party->PartyMembers[i];
-
-		std::cout << '\n' << partyMember->Name << '\n';
-
-		if (!partyMember->isDead()) {
-			std::cout << "HP: " << partyMember->HpCurrent << "/" << partyMember->HpTotal << '\n';
-
-			std::cout << "Mana: " << partyMember->ManaCurrent << "/" << partyMember->ManaTotal << '\n';
-		}
-		else {
-			std::cout << " DEAD\n\n";
-		}
-	}
-
-	drawLine(59);
-
-	std::cout << uiLines;
-}
-
 void Battle::manageSupportBuffs() 
 {
 	std::vector<int> positionsToRemove;
@@ -450,21 +353,138 @@ void Battle::calculatePhysicalDamage(CombatActorInterface* attackerActor, Combat
 	}
 }
 
-void Battle::castSupportSpell(SupportSpell* spell, Hero* hero)
+void Battle::selectSpellScreen()
 {
-	FancyDialog(hero->Name + " casted " + spell->Name + "!\n", 15);
+	std::vector<int> heroSpells = this->currentHero->Spells;
 
-	// If the support buff is already active, just renew the rounds
-	for (activeSupportBuff* supportBuff : activeSupportBuffs) {
-		if (spell->SupportBuff == supportBuff->SupportBuff) {
-			supportBuff->ReamaningRounds += spell->Rounds;
+	bool validSpellOption = false;
+
+	int inputSpellSelect;
+
+	while (!validSpellOption) {
+		system("cls");
+
+		this->printBattle();
+
+		FancyDialog("Select a spell to cast (0 return):", 2);
+
+		std::cin >> inputSpellSelect;
+
+		for (int i = 0; i < heroSpells.size(); i++) {
+			SpellInterface* spell = this->database->getASpell(heroSpells[i]);
+
+			std::cout << "[" << i + 1 << "] " << spell->Name << " | " << spell->Description << '\n';
+		}
+
+		if (inputSpellSelect == 0) {
+			validSpellOption = true;
+
+			this->battleState = SELECT_ACTION;
 
 			return;
 		}
+
+		inputSpellSelect -= 1;
+
+		if (inputSpellSelect >= enemyParty.size() || inputSpellSelect < 0) {
+			std::cout << "Invalid input!";
+
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+
+			continue;
+		}
+
+		this->selectedSpell = this->database->getASpell(heroSpells[inputSpellSelect]);
+
+		validSpellOption = true;
 	}
 
-	// If not, add it to the acrtiveSupportBuffs vector
-	activeSupportBuffs.emplace_back(spell->SupportBuff, spell->Rounds);
+	this->battleState = SPELL_CASTING;
+}
+
+void Battle::castSpellScreen() 
+{
+	switch (selectedSpell->SpellType) {
+	case BUFF:
+	{
+
+	}
+	case DAMAGE:
+	{
+
+	}
+	case SUPPORT:
+	{
+		SupportSpell* supportSpell = this->database->getASupportSpell(selectedSpell);
+
+		FancyDialog(currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
+
+		// If the support buff is already active, just renew the rounds
+		for (activeSupportBuff* supportBuff : activeSupportBuffs) {
+			if (supportSpell->SupportBuff == supportBuff->SupportBuff) {
+				supportBuff->ReamaningRounds += supportSpell->Rounds + 1;
+
+				break;
+			}
+		}
+
+		// If not, add it to the acrtiveSupportBuffs vector
+		activeSupportBuffs.emplace_back(supportSpell->SupportBuff, supportSpell->Rounds + 1);
+
+		break;
+	}
+	}
+}
+
+void Battle::printBattle()
+{
+	std::string uiLines = "";
+
+	std::string auxNameEnemy, auxHeroName;
+
+	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party.size();
+
+	drawLine(59);
+
+	std::cout << "Enemy line: " << '\n';
+
+	drawLine(59);
+
+	for (int i = 0; i < enemyPartySize; i++) {
+		Enemy* currentEnemy = enemyParty[i];
+
+		std::cout << "[" << i + 1 << "] " << currentEnemy->Name;
+
+		if (!currentEnemy->isDead()) {
+			std::cout << " HP: ??/??" << '\n';
+		}
+		else {
+			std::cout << " DEAD" << '\n';
+		}
+	}
+
+	std::cout << '\n' << "Your team:" << '\n';
+
+	drawLine(59);
+
+	for (int i = 0; i < partySize; i++) {
+		Hero* partyMember = party[i];
+
+		std::cout << '\n' << partyMember->Name << '\n';
+
+		if (!partyMember->isDead()) {
+			std::cout << "HP: " << partyMember->HpCurrent << "/" << partyMember->HpTotal << '\n';
+
+			std::cout << "Mana: " << partyMember->ManaCurrent << "/" << partyMember->ManaTotal << '\n';
+		}
+		else {
+			std::cout << " DEAD\n\n";
+		}
+	}
+
+	drawLine(59);
+
+	std::cout << uiLines;
 }
 
 Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
