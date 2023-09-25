@@ -40,7 +40,7 @@ private:
 		bool expired();
 	};
 
-	std::vector<activeSupportBuff*> activeSupportBuffs;
+	std::vector<activeSupportBuff> activeSupportBuffs;
 
 	void manageSupportBuffs();
 

@@ -310,11 +310,11 @@ void Battle::manageSupportBuffs()
 	std::vector<int> positionsToRemove;
 
 	for (int i = 0; i < this->activeSupportBuffs.size(); i++) {
-		activeSupportBuff* activeBuff = this->activeSupportBuffs[i];
+		activeSupportBuff activeBuff = this->activeSupportBuffs[i];
 
-		activeBuff->ReamaningRounds--;
+		activeBuff.ReamaningRounds--;
 
-		if (activeBuff->expired()) {
+		if (activeBuff.expired()) {
 			positionsToRemove.push_back(i);
 		}
 	}
@@ -421,9 +421,9 @@ void Battle::castSpellScreen()
 		FancyDialog(currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
 
 		// If the support buff is already active, just renew the rounds
-		for (activeSupportBuff* supportBuff : activeSupportBuffs) {
-			if (supportSpell->SupportBuff == supportBuff->SupportBuff) {
-				supportBuff->ReamaningRounds += supportSpell->Rounds + 1;
+		for (activeSupportBuff supportBuff : activeSupportBuffs) {
+			if (supportSpell->SupportBuff == supportBuff.SupportBuff) {
+				supportBuff.ReamaningRounds += supportSpell->Rounds + 1;
 
 				break;
 			}
