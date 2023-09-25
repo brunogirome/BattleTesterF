@@ -48,6 +48,13 @@ void Battle::start()
 
 			this->setNextState();
 			break;
+		case DEFFENDING:
+			this->deffendingScreen();
+
+			this->manageSupportBuffs();
+
+			this->setNextState();
+			break;
 		}
 	}
 }
@@ -148,49 +155,35 @@ void Battle::selectActionScreen()
 		switch (selectedAction) 
 		{
 		case 1: 
-		{
 			this->battleState = HERO_ATTACKING;
 
 			validChoice = true;
-		}
+
+			break;
 		case 2:
-		{
 			this->battleState = SPELL_SELECTION;
 
 			validChoice = true;
 
 			break;
-		}
 		case 3:
-		{
-			// TODO deffend logic
-			std::cout << "Deffeding does nothing right now!";
-
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			this->battleState = DEFFENDING;
 
 			validChoice = true;
 
 			break;
-		}
 		case 4:
-		{
-			// TODO escape logic
-			std::cout << "You can't escape right now!";
-
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			this->battleState = ESCAPING;
 
 			validChoice = true;
 
 			break;
-		}
 		default: 
-		{
 			std::cout << "Invalid input!";
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 
 			break;
-		}
 		}
 		
 		firstExecutuion = false;
@@ -434,6 +427,22 @@ void Battle::castSpellScreen()
 		break;
 	}
 	}
+}
+
+void Battle::deffendingScreen() 
+{
+	// TODO deffend logic
+	std::cout << "Deffeding does nothing right now!";
+
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+}
+
+void Battle::escapingScreen()
+{
+	// TODO escape logic
+	std::cout << "You can't escape right now!";
+
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
 void Battle::printBattle()

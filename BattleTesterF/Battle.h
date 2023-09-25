@@ -77,6 +77,10 @@ private:
 
 	void castSpellScreen();
 
+	void deffendingScreen();
+
+	void escapingScreen();
+
 	// Utils
 	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);
 
