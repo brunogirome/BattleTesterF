@@ -22,6 +22,8 @@ public:
 
 	Enemy* getAEnemy(int id);
 
+	Enemy CreateAEnemy(int id);
+
 	SupportSpell* getASupportSpell(SpellInterface* spell);
 
 	SpellInterface* getASpell(int id);

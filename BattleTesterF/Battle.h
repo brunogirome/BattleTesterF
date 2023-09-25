@@ -17,7 +17,7 @@ private:
 
 	Database* database;
 
-	std::vector<Enemy*> enemyParty;
+	std::vector<Enemy> enemyParty;
 
 	// Round management
 	class actorAttackOrder {
@@ -55,7 +55,7 @@ private:
 	void setNextAttacker();
 
 	// Battle State management/screens
-	Enemy* selectedEnemy;
+	Enemy* currentEnemy;
 
 	Hero* currentHero;
 

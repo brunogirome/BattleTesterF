@@ -62,6 +62,14 @@ void Battle::start()
 
 				this->setNextState();
 				break;
+			case DEFEAT:
+				return;
+
+				break;
+			case VICTORY:
+				return;
+
+				break;
 		}
 	}
 }
@@ -88,13 +96,24 @@ void Battle::setNextState()
 	// Check if VICTORY
 	bool aliveEnemy = false;
 
-	for (Enemy* enemy : enemyParty) {
+
+	for (int i = 0; i < enemyParty.size(); i++) {
+		Enemy* enemy = &(enemyParty[i]);
+
 		if (!enemy->isDead()) {
 			aliveEnemy = true;
 
 			break;
 		}
 	}
+
+	/*for (Enemy& enemy : enemyParty) {
+		if (!enemy.isDead()) {
+			aliveEnemy = true;
+
+			break;
+		}
+	}*/
 
 	if (!aliveEnemy) {
 		this->battleState = VICTORY;
@@ -103,7 +122,51 @@ void Battle::setNextState()
 	}
 
 	// Check the next attacker to set SELECT_ACTION or ENEMY_ATTACKING
-	this->setNextAttacker();
+	this->attackOrder.clear();
+
+	for (int i = 0; i < this->party.size(); i++) {
+		Hero* hero = this->party[i];
+
+		attackOrder.emplace_back(i, hero->SpeedTotal, HERO, hero->isDead());
+	}
+
+	for (int i = 0; i < this->enemyParty.size(); i++) {
+		Enemy* enemy = &(this->enemyParty[i]);
+
+		attackOrder.emplace_back(i, enemy->SpeedTotal, ENEMY, enemy->isDead());
+	}
+
+	std::size_t actorSpeedSizes = attackOrder.size();
+
+	int i, j;
+
+	bool swaped = false;
+
+	for (i = 0; i < actorSpeedSizes - 1; i++) {
+		swaped = false;
+
+		for (j = 0; j < actorSpeedSizes - i - 1; j++) {
+			if (attackOrder[j].Speed < attackOrder[j + 1].Speed) {
+				std::swap(attackOrder[j], attackOrder[j + 1]);
+
+				swaped = true;
+			}
+		}
+
+		if (!swaped) {
+			break;
+		}
+	}
+
+	this->currentAttackerPointer = this->currentAttackerPointer >= this->roundSize ? 0 : currentAttackerPointer;
+
+	this->currentAttacker = &(this->attackOrder[currentAttackerPointer]);
+
+	while (this->currentAttacker->IsDead) {
+		this->currentAttackerPointer++;
+
+		this->currentAttacker = &(this->attackOrder[currentAttackerPointer]);
+	}
 
 	this->battleState = this->currentAttacker->TypeOfActor == HERO ? SELECT_ACTION : ENEMY_TURN;
 }
@@ -126,7 +189,7 @@ void Battle::startingScreen()
 	for (int i = 0; i < biggestParty; i++) {
 		auxVersus = i > 0 ? "\t\t\t\t" : "\t\t VS \t";
 
-		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i]->Name : "\t\t";
+		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i].Name : "\t\t";
 
 		auxHeroName = i < partySize ? party[i]->Name : "";
 
@@ -230,11 +293,11 @@ void Battle::selectEnemyScreen()
 			continue;
 		}
 
-		this->selectedEnemy = enemyParty[inputEnemySelected];
+		this->currentEnemy = &(enemyParty[inputEnemySelected]);
 
-		std::string enemyName = selectedEnemy->Name;
+		std::string enemyName = currentEnemy->Name;
 
-		if (selectedEnemy->HpCurrent <= 0) {
+		if (currentEnemy->HpCurrent <= 0) {
 			std::cout << enemyName << " is dead, select another enemy!";
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -250,58 +313,12 @@ void Battle::selectEnemyScreen()
 
 void Battle::heroAttackingScreen()
 {
-	this->calculatePhysicalDamage(currentHero, selectedEnemy);
+	this->calculatePhysicalDamage(currentHero, currentEnemy);
 }
 
 void Battle::setNextAttacker()
 {
-	std::vector<actorAttackOrder> actorsSpeedOrder;
 
-	for (int i = 0; i < this->party.size(); i++) {
-		Hero* currentHero = this->party[i];
-
-		actorsSpeedOrder.emplace_back(i, currentHero->SpeedTotal, HERO, currentHero->isDead());
-	}
-
-	for (int i = 0; i < this->enemyParty.size(); i++) {
-		Enemy* currentEnemy = this->enemyParty[i];
-
-		actorsSpeedOrder.emplace_back(i, currentEnemy->SpeedTotal, ENEMY, currentEnemy->isDead());
-	}
-
-	std::size_t actorSpeedSizes = actorsSpeedOrder.size();
-
-	int i, j;
-
-	bool swaped = false;
-
-	for (i = 0; i < actorSpeedSizes - 1; i++) {
-		swaped = false;
-
-		for (j = 0; j < actorSpeedSizes - i - 1; j++) {
-			if (actorsSpeedOrder[j].Speed < actorsSpeedOrder[j + 1].Speed) {
-				std::swap(actorsSpeedOrder[j], actorsSpeedOrder[j + 1]);
-
-				swaped = true;
-			}
-		}
-
-		if (!swaped) {
-			break;
-		}
-	}
-
-	this->attackOrder = actorsSpeedOrder;
-
-	this->currentAttackerPointer = this->currentAttackerPointer >= this->roundSize ? 0 : currentAttackerPointer;
-
-	this->currentAttacker = &(this->attackOrder[currentAttackerPointer]);
-
-	while (this->currentAttacker->IsDead) {
-		this->currentAttackerPointer++;
-
-		this->currentAttacker = &(this->attackOrder[currentAttackerPointer]);
-	}
 }
 
 void Battle::manageSupportBuffs() 
@@ -417,7 +434,7 @@ void Battle::castSpellScreen()
 	{
 		SupportSpell* supportSpell = this->database->getASupportSpell(selectedSpell);
 
-		FancyDialog(currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
+		FancyDialog(this->currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
 
 		// If the support buff is already active, just renew the rounds
 		for (activeSupportBuff supportBuff : activeSupportBuffs) {
@@ -467,7 +484,7 @@ void Battle::printBattle()
 	drawLine(59);
 
 	for (int i = 0; i < enemyPartySize; i++) {
-		Enemy* currentEnemy = enemyParty[i];
+		Enemy* currentEnemy = &(enemyParty[i]);
 
 		std::cout << "[" << i + 1 << "] " << currentEnemy->Name;
 
@@ -505,9 +522,7 @@ void Battle::printBattle()
 
 void Battle::enemyTurnScreen() 
 {
-	Enemy* currentEnemy = enemyParty[this->currentAttacker->Position];
-
-	std::string enemyName = currentEnemy->Name;
+	std::string enemyName = this->currentEnemy->Name;
 
 	std::cout << enemyName << " turn!\n";
 
@@ -530,6 +545,8 @@ void Battle::enemyTurnScreen()
 		heroTarget = party[targetSelector];
 	}
 
+	this->printBattle();
+
 	this->calculatePhysicalDamage(currentEnemy, heroTarget);
 }
 
@@ -540,7 +557,7 @@ Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
 	this->database = game->GameDatabase;
 
 	for (int enemyId : enemyPartyIds) {
-		this->enemyParty.push_back(game->GameDatabase->getAEnemy(enemyId));
+		this->enemyParty.push_back(game->GameDatabase->CreateAEnemy(enemyId));
 	}
 
 	this->currentRound = 1;

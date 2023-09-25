@@ -30,6 +30,11 @@ Enemy *Database::getAEnemy(int id)
     return &(Enemies[id - 1]);
 }
 
+Enemy Database::CreateAEnemy(int id) 
+{
+    return Enemies[id - 1];
+}
+
 SupportSpell *Database::getASupportSpell(SpellInterface *spell)
 {
     int id = spell->Id;
