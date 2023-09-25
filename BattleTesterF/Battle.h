@@ -8,7 +8,7 @@
 
 enum typeOfActorEnum { HERO, ENEMY };
 
-enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, HERO_ATTACKING, SPELL_SELECTION, SPELL_CASTING, ENEMY_ATTACKING, DEFFENDING, ESCAPING, VICTORY, DEFEAT };
+enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, HERO_ATTACKING, SPELL_SELECTION, SPELL_CASTING, ENEMY_TURN, DEFFENDING, ESCAPING, VICTORY, DEFEAT };
 
 class Battle
 {
@@ -81,10 +81,10 @@ private:
 
 	void escapingScreen();
 
+	void enemyTurnScreen();
+
 	// Utils
 	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);
-
-	void castSupportSpell(SupportSpell* spell, Hero* hero);
 
 	// Support spells activation
 	// ------------
