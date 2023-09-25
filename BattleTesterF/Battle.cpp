@@ -162,7 +162,7 @@ void Battle::selectActionScreen()
 		switch (selectedAction) 
 		{
 		case 1: 
-			this->battleState = HERO_ATTACKING;
+			this->battleState = ENEMY_SELECTION;
 
 			validChoice = true;
 
