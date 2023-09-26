@@ -189,7 +189,7 @@ void Battle::startingScreen()
 {
 	std::string battleStartHeader = "";
 
-	std::string auxHeroName, auxEnemyName, auxVersus;
+	std::string auxHeroName, auxEnemyName, auxVersus, auxSeparator;
 
 	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party.size();
 
@@ -201,9 +201,11 @@ void Battle::startingScreen()
 	battleStartHeader += "\t+-------------------------------------------+\n";
 
 	for (int i = 0; i < biggestParty; i++) {
-		auxVersus = i > 0 ? "\t\t\t\t" : "\t\t VS \t";
-
 		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i].Name : "\t\t";
+
+		auxSeparator = auxEnemyName.length() > 8 ? "\t\t" : "\t\t\t";
+
+		auxVersus = i > 0 ? auxSeparator : "\t\t VS \t";
 
 		auxHeroName = i < partySize ? party[i]->Name : "";
 
