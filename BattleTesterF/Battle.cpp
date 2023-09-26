@@ -241,11 +241,15 @@ void Battle::selectActionScreen()
 		case 1: 
 			this->battleState = ENEMY_SELECTION;
 
+			this->castedSpell = false;
+
 			validChoice = true;
 
 			break;
 		case 2:
 			this->battleState = SPELL_SELECTION;
+
+			this->castedSpell = true;
 
 			validChoice = true;
 
@@ -322,7 +326,7 @@ void Battle::selectEnemyScreen()
 		validEnemyOption = true;
 	}
 
-	this->battleState = HERO_ATTACKING;
+	this->battleState = castedSpell ? SPELL_CASTING : HERO_ATTACKING;
 }
 
 void Battle::heroAttackingScreen()
@@ -443,40 +447,79 @@ void Battle::selectSpellScreen()
 		validSpellOption = true;
 	}
 
-	this->battleState = SPELL_CASTING;
+	this->battleState = this->selectedSpell->SpellType == DAMAGE ? ENEMY_SELECTION : SPELL_CASTING;
 }
 
 void Battle::castSpellScreen() 
 {
 	this->printBattle();
 
-	switch (selectedSpell->SpellType) {
+	switch (this->selectedSpell->SpellType) {
 	case BUFF:
 	{
 
 	}
 	case DAMAGE:
 	{
+		DamageSpell* spell = this->database->getADamageSpell(this->selectedSpell);
 
+		CombatActorInterface* attackerActor = this->currentHero;
+
+		CombatActorInterface* deffenderActor = this->currentEnemy;
+
+		FancyDialog(attackerActor->Name + " casted " + spell->Name + " on " + deffenderActor->Name + "!\n", 15);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+		FancyDialog(". . . *\n", 40);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+		float attackerBonus = attackerActor->Element == spell->Element ? 1.2f : 1;
+
+		float elementBonus =
+			(attackerActor->Element == FIRE && deffenderActor->Element == WATER) ||
+			(attackerActor->Element == WATER && deffenderActor->Element == FIRE) ||
+			(attackerActor->Element == EARTH && deffenderActor->Element == WIND) ||
+			(attackerActor->Element == WIND && deffenderActor->Element == EARTH) ||
+			(attackerActor->Element == DARK && deffenderActor->Element == LIGHT) ||
+			(attackerActor->Element == LIGHT && deffenderActor->Element == DARK) ?
+			0.8f : 1;
+
+		int damage = attackerActor->MagicPowerTotal + (int)(spell->Damage * attackerBonus) - (int)(deffenderActor->MagicDefenseTotal * elementBonus);
+
+		FancyDialog("Dealt " + std::to_string(damage) + " damage on " + deffenderActor->Name + "!", 15);
+
+		deffenderActor->HpCurrent -= damage;
+
+		if (deffenderActor->isDead()) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+			FancyDialog(attackerActor->Name + " killed " + deffenderActor->Name + "!", 15);
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(999));
+		}
+
+		break;
 	}
 	case SUPPORT:
 	{
-		SupportSpell* supportSpell = this->database->getASupportSpell(this->selectedSpell);
+		SupportSpell* spell = this->database->getASupportSpell(this->selectedSpell);
 
-		FancyDialog(this->currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
+		FancyDialog(this->currentHero->Name + " casted " + spell->Name + "!\n", 15);
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		for (activeSupportBuff& supportBuff : activeSupportBuffs) {
-			if (supportSpell->SupportBuff == supportBuff.SupportBuff) {
-				supportBuff.ReamaningRounds += supportSpell->Rounds + 1;
+			if (spell->SupportBuff == supportBuff.SupportBuff) {
+				supportBuff.ReamaningRounds += spell->Rounds + 1;
 
 				return;
 			}
 		}
 
 		// If not, add it to the acrtiveSupportBuffs vector
-		activeSupportBuffs.emplace_back(supportSpell->SupportBuff, supportSpell->Rounds + 1);
+		activeSupportBuffs.emplace_back(spell->SupportBuff, spell->Rounds + 1);
 
 		break;
 	}

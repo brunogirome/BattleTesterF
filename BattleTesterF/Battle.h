@@ -61,6 +61,8 @@ private:
 	
 	battleStateEnum battleState;
 
+	bool castedSpell = false;
+
 	void setNextState();
 
 	void startingScreen();
