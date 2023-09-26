@@ -11,39 +11,52 @@ Database::Database()
 
 SpellInterface *Database::getASpell(int id)
 {
-    for (int i = 0; i < SupportSpells.size(); i++)
+    for (int i = 0; i < this->SupportSpells.size(); i++)
     {
-        if (SupportSpells[i].Id = id)
+        if (this->SupportSpells[i].Id = id)
         {
-            return &(SupportSpells[i]);
+            return &(this->SupportSpells[i]);
         }
     }
 }
 
 Hero *Database::getAHero(int id)
 {
-    return &(Heroes[id - 1]);
+    return &(this->Heroes[id - 1]);
 }
 
 Enemy *Database::getAEnemy(int id)
 {
-    return &(Enemies[id - 1]);
+    return &(this->Enemies[id - 1]);
 }
 
 Enemy Database::CreateAEnemy(int id) 
 {
-    return Enemies[id - 1];
+    return this->Enemies[id - 1];
 }
 
 SupportSpell *Database::getASupportSpell(SpellInterface *spell)
 {
     int id = spell->Id;
 
-    for (int i = 0; i < SupportSpells.size(); i++)
+    for (int i = 0; i < this->SupportSpells.size(); i++)
     {
-        if (SupportSpells[i].Id = id)
+        if (this->SupportSpells[i].Id = id)
         {
-            return &(SupportSpells[i]);
+            return &(this->SupportSpells[i]);
+        }
+    }
+}
+
+DamageSpell* Database::getADamageSpell(SpellInterface* spell)
+{
+    int id = spell->Id;
+
+    for (int i = 0; i < this->DamageSpells.size(); i++)
+    {
+        if (this->DamageSpells[i].Id = id)
+        {
+            return &(this->DamageSpells[i]);
         }
     }
 }
@@ -179,23 +192,27 @@ void Database::loadSpellsFromDatabase()
 
         spellType = (SpellTypesEnum)sqlite3_column_int(statement, 3);
 
-        if (spellType == SpellTypesEnum::BUFF || spellType == SpellTypesEnum::SUPPORT)
+        if (spellType == BUFF || spellType == SUPPORT)
         {
             rounds = sqlite3_column_int(statement, 5);
         }
 
         switch (spellType)
         {
-        case SpellTypesEnum::BUFF:
+        case BUFF:
             break;
-        case SpellTypesEnum::DAMAGE:
-            element = (ElementsEnum)sqlite3_column_int(statement, 9);
+        case DAMAGE:
+            element = (ElementsEnum)sqlite3_column_int(statement, 8);
+
+            damage = sqlite3_column_int(statement, 9);
+
+            this->DamageSpells.emplace_back(id, name, description, element, damage);
 
             break;
-        case SpellTypesEnum::SUPPORT:
+        case SUPPORT:
             supportBuff = (SupportBuffsEnum)sqlite3_column_int(statement, 4);
 
-            SupportSpells.emplace_back(id, name, description, rounds, supportBuff);
+            this->SupportSpells.emplace_back(id, name, description, rounds, supportBuff);
             break;
         }
     }
