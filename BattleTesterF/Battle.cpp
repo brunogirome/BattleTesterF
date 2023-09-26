@@ -2,15 +2,13 @@
 
 void Battle::start()
 {
-	bool ended = false;
-
 	this->battleState = STARTING;
 
 	this->roundSize = this->party.size() + this->enemyParty.size();
 
 	this->currentAttackerPointer = 0;
 
-	while (!ended) {
+	while (true) {
 		system("cls");
 
 		switch (this->battleState) {
@@ -386,13 +384,13 @@ void Battle::selectSpellScreen()
 
 		FancyDialog("Select a spell to cast (0 return):", 2);
 
-		std::cin >> inputSpellSelect;
-
 		for (int i = 0; i < heroSpells.size(); i++) {
 			SpellInterface* spell = this->database->getASpell(heroSpells[i]);
 
 			std::cout << "[" << i + 1 << "] " << spell->Name << " | " << spell->Description << '\n';
 		}
+
+		std::cin >> inputSpellSelect;
 
 		if (inputSpellSelect == 0) {
 			validSpellOption = true;
@@ -438,6 +436,8 @@ void Battle::castSpellScreen()
 		SupportSpell* supportSpell = this->database->getASupportSpell(selectedSpell);
 
 		FancyDialog(this->currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		// If the support buff is already active, just renew the rounds
 		for (activeSupportBuff supportBuff : activeSupportBuffs) {
@@ -491,15 +491,26 @@ void Battle::printBattle()
 	drawLine(59);
 
 	for (int i = 0; i < enemyPartySize; i++) {
-		Enemy* currentEnemy = &(enemyParty[i]);
+		Enemy* enemy = &(enemyParty[i]);
 
-		std::cout << "[" << i + 1 << "] " << currentEnemy->Name;
+		std::cout << "[" << i + 1 << "] " << enemy->Name;
 
-		if (!currentEnemy->isDead()) {
-			std::cout << " HP: ??/??" << '\n';
+		bool sightActive = false;
+
+		for (activeSupportBuff supportBuff : activeSupportBuffs) {
+			if (supportBuff.SupportBuff == SIGHT) {
+				sightActive = true;
+			}
+		}
+
+		if (enemy->isDead()) {
+			std::cout << " DEAD" << '\n';
+		}
+		else if (sightActive) {
+			std::cout << " HP: " << enemy->HpCurrent << "/" << enemy->HpTotal << '\n';
 		}
 		else {
-			std::cout << " DEAD" << '\n';
+			std::cout << " HP: ??/??" << '\n';
 		}
 	}
 
