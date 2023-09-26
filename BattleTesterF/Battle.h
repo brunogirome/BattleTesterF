@@ -81,6 +81,10 @@ private:
 
 	void enemyTurnScreen();
 
+	void victoryScreen();
+
+	void defeatScreen();
+
 	// Utils
 	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);
 

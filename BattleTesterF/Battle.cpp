@@ -82,10 +82,14 @@ void Battle::start()
 				this->setNextState();
 				break;
 			case DEFEAT:
+				this->defeatScreen();
+
 				return;
 
 				break;
 			case VICTORY:
+				this->victoryScreen();
+
 				return;
 
 				break;
@@ -172,6 +176,8 @@ void Battle::setNextState()
 
 	while (this->currentAttacker->IsDead) {
 		this->currentAttackerPointer++;
+
+		this->currentAttackerPointer = this->currentAttackerPointer >= this->roundSize ? 0 : currentAttackerPointer;
 
 		this->currentAttacker = &(this->attackOrder[currentAttackerPointer]);
 	}
@@ -587,6 +593,28 @@ void Battle::enemyTurnScreen()
 	}
 
 	this->calculatePhysicalDamage(currentEnemy, heroTarget);
+}
+
+void Battle::victoryScreen()
+{
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	std::cout << "\n\n\t\t";
+
+	FancyDialog("VICTORY!", 25);
+
+	std::cout << "\n\n\n";
+}
+
+void Battle::defeatScreen()
+{
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	std::cout << "\n\n\t\t";
+
+	FancyDialog("Game Over...", 50);
+
+	std::cout << "\n\n\n";
 }
 
 Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
