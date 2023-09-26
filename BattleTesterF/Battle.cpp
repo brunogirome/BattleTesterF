@@ -331,11 +331,11 @@ void Battle::manageSupportBuffs()
 	std::vector<int> positionsToRemove;
 
 	for (int i = 0; i < this->activeSupportBuffs.size(); i++) {
-		activeSupportBuff activeBuff = this->activeSupportBuffs[i];
+		activeSupportBuff* activeBuff = &(this->activeSupportBuffs[i]);
 
-		activeBuff.ReamaningRounds--;
+		activeBuff->ReamaningRounds--;
 
-		if (activeBuff.expired()) {
+		if (activeBuff->expired()) {
 			positionsToRemove.push_back(i);
 		}
 	}
@@ -345,7 +345,23 @@ void Battle::manageSupportBuffs()
 	}
 
 	for (int position : positionsToRemove) {
-		this->activeSupportBuffs.erase(activeSupportBuffs.begin() - 1 + position);
+		std::string buffName;
+
+		switch (this->activeSupportBuffs[position].SupportBuff) {
+		case SIGHT:
+			buffName = "Sight";
+			break;
+		}
+
+		system("cls");
+
+		this->printBattle();
+
+		FancyDialog("The buff " + buffName + " has expired...", 5);
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		this->activeSupportBuffs.erase(this->activeSupportBuffs.begin() + position);
 	}
 }
 
