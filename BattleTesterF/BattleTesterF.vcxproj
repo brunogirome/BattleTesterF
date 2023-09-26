@@ -133,6 +133,7 @@
     <ClCompile Include="CombatActorInterface.h" />
     <ClCompile Include="BattleTesterF.cpp" />
     <ClCompile Include="CombatTypesEnum.h" />
+    <ClCompile Include="DamageSpell.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="ElementsEnum.h" />
@@ -148,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BuffTypesEnum.h" />
+    <ClInclude Include="DamageSpell.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="Enemy.h" />

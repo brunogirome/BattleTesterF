@@ -13,5 +13,5 @@ public:
 
 	SupportBuffsEnum SupportBuff;
 
-	SupportSpell(int id, std::string name, std::string description, SpellTypesEnum spellType, int rounds, SupportBuffsEnum supportBuff);
+	SupportSpell(int id, std::string name, std::string description, int rounds, SupportBuffsEnum supportBuff);
 };

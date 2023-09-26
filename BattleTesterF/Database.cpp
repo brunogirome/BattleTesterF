@@ -195,7 +195,7 @@ void Database::loadSpellsFromDatabase()
         case SpellTypesEnum::SUPPORT:
             supportBuff = (SupportBuffsEnum)sqlite3_column_int(statement, 4);
 
-            SupportSpells.emplace_back(id, name, description, spellType, rounds, supportBuff);
+            SupportSpells.emplace_back(id, name, description, rounds, supportBuff);
             break;
         }
     }
@@ -263,7 +263,7 @@ void Database::loadHeroesFromDatabase()
 
         std::vector<int> heroSpells = {};
 
-        std::string query = " SELECT * FROM Spells INNER JOIN heroes_spells ON HeroId = " + std::to_string(id) + ";";
+        std::string query = " SELECT * FROM heroes_spells WHERE HeroId = " + std::to_string(id) + ";";
 
         if (sqlite3_prepare_v2(database, query.c_str(), -1, &statementSpells, NULL) != SQLITE_OK)
         {
@@ -276,9 +276,9 @@ void Database::loadHeroesFromDatabase()
 
         while ((ret_codeSpells = sqlite3_step(statementSpells)) == SQLITE_ROW)
         {
-            spellId = sqlite3_column_int(statementSpells, 0);
+            spellId = sqlite3_column_int(statementSpells, 1);
 
-            heroSpells.emplace_back(spellId);
+            heroSpells.push_back(spellId);
         }
 
         disconnect(statementSpells);
