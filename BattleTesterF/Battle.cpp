@@ -52,6 +52,8 @@ void Battle::start()
 
 				break;
 			case ENEMY_TURN:
+				this->currentEnemy = &(this->enemyParty[this->currentAttacker->Position]);
+
 				this->enemyTurnScreen();
 
 				this->manageSupportBuffs();
@@ -66,12 +68,16 @@ void Battle::start()
 
 				this->manageSupportBuffs();
 
+				this->currentAttackerPointer++;
+
 				this->setNextState();
 				break;
 			case ESCAPING:
 				this->escapingScreen();
 
 				this->manageSupportBuffs();
+
+				this->currentAttackerPointer++;
 
 				this->setNextState();
 				break;
