@@ -11,9 +11,17 @@ Database::Database()
 
 SpellInterface *Database::getASpell(int id)
 {
+    for (int i = 0; i < this->DamageSpells.size(); i++)
+    {
+        if (this->DamageSpells[i].Id == id)
+        {
+            return &(this->DamageSpells[i]);
+        }
+    }
+
     for (int i = 0; i < this->SupportSpells.size(); i++)
     {
-        if (this->SupportSpells[i].Id = id)
+        if (this->SupportSpells[i].Id == id)
         {
             return &(this->SupportSpells[i]);
         }
