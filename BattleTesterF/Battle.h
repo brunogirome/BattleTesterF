@@ -52,8 +52,6 @@ private:
 
 	actorAttackOrder* currentAttacker;
 
-	void setNextAttacker();
-
 	// Battle State management/screens
 	Enemy* currentEnemy;
 

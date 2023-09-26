@@ -455,18 +455,17 @@ void Battle::castSpellScreen()
 	}
 	case SUPPORT:
 	{
-		SupportSpell* supportSpell = this->database->getASupportSpell(selectedSpell);
+		SupportSpell* supportSpell = this->database->getASupportSpell(this->selectedSpell);
 
 		FancyDialog(this->currentHero->Name + " casted " + supportSpell->Name + "!\n", 15);
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
-		// If the support buff is already active, just renew the rounds
-		for (activeSupportBuff supportBuff : activeSupportBuffs) {
+		for (activeSupportBuff& supportBuff : activeSupportBuffs) {
 			if (supportSpell->SupportBuff == supportBuff.SupportBuff) {
 				supportBuff.ReamaningRounds += supportSpell->Rounds + 1;
 
-				break;
+				return;
 			}
 		}
 
