@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Battle.cpp" />
+    <ClCompile Include="BuffSpell.cpp" />
     <ClCompile Include="C:\Users\lnpc\Downloads\sqlite-amalgamation-3430000\sqlite-amalgamation-3430000\sqlite3.c" />
     <ClCompile Include="CombatActorInterface.cpp" />
     <ClCompile Include="CombatActorInterface.h" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Battle.h" />
+    <ClInclude Include="BuffSpell.h" />
     <ClInclude Include="BuffTypesEnum.h" />
     <ClInclude Include="DamageSpell.h" />
     <ClInclude Include="Database.h" />

@@ -6,6 +6,8 @@
 #include "CombatTypesEnum.h"
 #include "ElementsEnum.h"
 
+#include "BuffSpell.h"
+
 class CombatActorInterface {
 private:
 	const float HP_MULTIPLIER = 2.5f;
@@ -20,7 +22,7 @@ private:
 	const float MEELE_DEFENSE_MULTIPLIER = 0.5f;
 	const float MAGIC_DEFENSE_MULTIPLIER = 0.5f;
 
-	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus);
+	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, float buff);
 
 public:
 	CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells);
@@ -67,5 +69,9 @@ public:
 
 	std::vector<int> Spells;
 
+	std::vector<BuffSpell> ActiveBuffs;
+
 	bool isDead();
+
+	void calculateTotals();
 };

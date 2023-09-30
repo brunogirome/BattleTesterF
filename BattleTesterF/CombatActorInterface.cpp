@@ -19,20 +19,7 @@ CombatActorInterface::CombatActorInterface(int id, std::string name, CombatTypes
 	this->MeeleDefenseBase = meeleDefenseBase;
 	this->MagicDefenseBase = magicDefenseBase;
 
-	// Setting basic status
-	this->HpTotal = totalStatusFormula(HpBase, HP_MULTIPLIER, Strength, TYPE_STRENGTH);
-	this->ManaTotal = totalStatusFormula(ManaBase, MANA_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
-	this->SpeedTotal = totalStatusFormula(SpeedBase, MANA_MULTIPLIER, Agility, TYPE_AGILITY);
-	this->EvasionTotal = totalStatusFormula(EvasionBase, EVASION_MULTIPLIER, Agility, TYPE_AGILITY);
-	this->StaminaTotal = totalStatusFormula(StaminaBase, STAMINA_MULTIPLIER, Agility, TYPE_AGILITY);
-
-	// Setting damage status
-	this->MeelePowerTotal = totalStatusFormula(MeelePowerBase, MEELE_POWER_MULTIPLIER, Strength, TYPE_STRENGTH);
-	this->MagicPowerTotal = totalStatusFormula(MagicPowerBase, MAGIC_POWER_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
-
-	// Setting defense satus
-	this->MeeleDefenseTotal = totalStatusFormula(MeeleDefenseBase, MEELE_DEFENSE_MULTIPLIER, Strength, TYPE_STRENGTH);
-	this->MagicDefenseTotal = totalStatusFormula(MagicDefenseBase, MAGIC_DEFENSE_MULTIPLIER, Intelligence, TYPE_INTELLIGENCE);
+	this->calculateTotals();
 
 	this->HpCurrent = this->HpTotal;
 	this->ManaCurrent = this->ManaTotal;
@@ -45,9 +32,48 @@ bool CombatActorInterface::isDead()
 	return this->HpCurrent <= 0;
 }
 
-int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus) {
-	const int bonus = this->CombatType == combatStatusBonus ? 2 : 1;
+void CombatActorInterface::calculateTotals()
+{
+	auto findBuff = [](BuffTypesEnum buff, std::vector<BuffSpell> buffs)
+	{
+		for (BuffSpell spell : buffs) {
+			if (spell.BuffType == buff) {
+				return spell.Multiplier;
+			}
+		}
 
-	return (int)round(baseStatus + ((multiplier * combatStatusValue) * bonus));
+		return 0.f;
+	};
+
+	// Setting basic status
+	this->HpTotal = totalStatusFormula(this->HpBase, this->HP_MULTIPLIER, this->Strength, TYPE_STRENGTH, findBuff(HP_BUFF, this->ActiveBuffs));
+
+	this->ManaTotal = totalStatusFormula(this->ManaBase, this->MANA_MULTIPLIER, this->Intelligence, TYPE_INTELLIGENCE, findBuff(MANA_BUFF, this->ActiveBuffs));
+
+	this->SpeedTotal = totalStatusFormula(this->SpeedBase, this->MANA_MULTIPLIER, this->Agility, TYPE_AGILITY, findBuff(SPEED_BUFF, this->ActiveBuffs));
+
+	this->EvasionTotal = totalStatusFormula(this->EvasionBase, this->EVASION_MULTIPLIER, this->Agility, TYPE_AGILITY, findBuff(EVASION_BUFF, this->ActiveBuffs));
+
+	this->StaminaTotal = totalStatusFormula(this->StaminaBase, this->STAMINA_MULTIPLIER, this->Agility, TYPE_AGILITY, findBuff(STAMINA_BUFF, this->ActiveBuffs));
+
+	// Setting damage status
+	this->MeelePowerTotal = totalStatusFormula(this->MeelePowerBase, this->MEELE_POWER_MULTIPLIER, this->Strength, TYPE_STRENGTH, findBuff(PHYSICAL_DAMAGE_BUFF, this->ActiveBuffs));
+
+	this->MagicPowerTotal = totalStatusFormula(this->MagicPowerBase, this->MAGIC_POWER_MULTIPLIER, this->Intelligence, TYPE_INTELLIGENCE, findBuff(MAGIC_DAMAGE_BUFF, this->ActiveBuffs));
+
+	// Setting defense satus
+	this->MeeleDefenseTotal = totalStatusFormula(this->MeeleDefenseBase, this->MEELE_DEFENSE_MULTIPLIER, this->Strength, TYPE_STRENGTH, findBuff(PHYSICAL_DEFENSE_BUFF, this->ActiveBuffs));
+
+	this->MagicDefenseTotal = totalStatusFormula(this->MagicDefenseBase, this->MAGIC_DEFENSE_MULTIPLIER, this->Intelligence, TYPE_INTELLIGENCE, findBuff(MAGIC_DEFENSE_BUFF, this->ActiveBuffs));
+}
+
+int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, float buff) {
+	const int typeBonus = this->CombatType == combatStatusBonus ? 2 : 1;
+
+	const float buffValue = 1 + buff;
+
+	const float combatTypeBonus = multiplier * combatStatusValue * typeBonus;
+
+	return (int)round((baseStatus + combatTypeBonus) * buffValue);
 }
 	
