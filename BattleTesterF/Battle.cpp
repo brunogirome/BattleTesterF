@@ -42,7 +42,7 @@ void Battle::start()
 
 				break;
 			case ACTOR_SELECTOR:
-				this->selectEnemyScreen();
+				this->selectActorScreen();
 
 				break;
 			case SPELL_CASTING:
@@ -336,7 +336,7 @@ void Battle::selectActorScreen()
 	}
 
 	for (Enemy& enemy : enemyParty) {
-		actors.emplace_back(enemy);
+		actors.push_back(&enemy);
 	}
 
 	int inputActorSelected;
@@ -351,7 +351,7 @@ void Battle::selectActorScreen()
 		FancyDialog("Select someone (0 cancel): ", 2);
 
 		for (int i = 0; i < actors.size(); i++) {
-			std::cout << '[' << (i + 1) << '] ' << actors[i]->Name << '\n';
+			std::cout << '[' << (i + 1) << "] " << actors[i]->Name << '\n';
 		}
 
 		std::cin >> inputActorSelected;
@@ -499,7 +499,7 @@ void Battle::selectSpellScreen()
 
 		inputSpellSelect -= 1;
 
-		if (inputSpellSelect >= enemyParty.size() || inputSpellSelect < 0) {
+		if (inputSpellSelect >= heroSpells.size() || inputSpellSelect < 0) {
 			std::cout << "Invalid input!";
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -512,21 +512,17 @@ void Battle::selectSpellScreen()
 		validSpellOption = true;
 	}
 
-	battleStateEnum newState;
-	
 	switch (this->selectedSpell->SpellType) {
 	case DAMAGE:
-		newState = ENEMY_SELECTION;
+		this->battleState = ENEMY_SELECTION;
 		break;
 	case SUPPORT:
-		newState = SPELL_CASTING;
+		this->battleState = SPELL_CASTING;
 		break;
 	case BUFF:
-		newState = ACTOR_SELECTOR;
+		this->battleState = ACTOR_SELECTOR;
 		break;
 	}
-
-	this->battleState = newState;
 }
 
 void Battle::castSpellScreen() 
@@ -536,7 +532,47 @@ void Battle::castSpellScreen()
 	switch (this->selectedSpell->SpellType) {
 	case BUFF:
 	{
+		BuffSpell* castedBuff = this->database->getABuffSpell(this->selectedSpell);
 
+		CombatActorInterface* buffedActor = this->selectedBuffedActor;
+
+		TypeOfActorEnum typeOfActor = this->currentAttacker->TypeOfActor;
+
+		std::string casterName = typeOfActor == HERO ? this->party[this->currentAttacker->Position]->Name : this->enemyParty[currentAttacker->Position].Name;
+
+		bool alreadyBuffed = false;
+
+		for (CombatActorInterface::ActiveBuff& buff : buffedActor->ActiveBuffs) {
+			if (buff.Buff->BuffType == castedBuff->BuffType) {
+				buff.RemaningRounds+= castedBuff->Rounds;
+
+				alreadyBuffed = true;
+			}
+		}
+
+		FancyDialog(casterName + " casted " + castedBuff->Name + " on " + buffedActor->Name + "!\n", 15);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+		FancyDialog(". o O + + +\n", 30);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(333));
+
+		if (!alreadyBuffed) {
+			buffedActor->ActiveBuffs.emplace_back(castedBuff, castedBuff->Rounds);
+		}
+
+		if (castedBuff->BuffType == HP_BUFF) {
+			buffedActor->HpCurrent *= (1 + castedBuff->Multiplier);
+		}
+
+		if (castedBuff->BuffType == MANA_BUFF) {
+			buffedActor->ManaCurrent *= (1 + castedBuff->Multiplier);
+		}
+
+		buffedActor->calculateTotals();
+
+		break;
 	}
 	case DAMAGE:
 	{

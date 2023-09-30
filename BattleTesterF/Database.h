@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "SupportSpell.h"
 #include "DamageSpell.h"
+#include "BuffSpell.h"
 
 class Database {
 public:
@@ -21,6 +22,8 @@ public:
 
 	std::vector<DamageSpell> DamageSpells;
 
+	std::vector<BuffSpell> BuffSpells;
+
 	Hero* getAHero(int id);
 
 	Enemy* getAEnemy(int id);
@@ -30,6 +33,8 @@ public:
 	SupportSpell* getASupportSpell(SpellInterface* spell);
 
 	DamageSpell* getADamageSpell(SpellInterface* spell);
+
+	BuffSpell* getABuffSpell(SpellInterface* spell);
 
 	SpellInterface* getASpell(int id);
 

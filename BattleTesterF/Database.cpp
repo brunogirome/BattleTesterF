@@ -19,6 +19,14 @@ SpellInterface *Database::getASpell(int id)
         }
     }
 
+    for (int i = 0; i < this->BuffSpells.size(); i++)
+    {
+        if (this->BuffSpells[i].Id == id)
+        {
+            return &(this->BuffSpells[i]);
+        }
+    }
+
     for (int i = 0; i < this->SupportSpells.size(); i++)
     {
         if (this->SupportSpells[i].Id == id)
@@ -65,6 +73,19 @@ DamageSpell* Database::getADamageSpell(SpellInterface* spell)
         if (this->DamageSpells[i].Id = id)
         {
             return &(this->DamageSpells[i]);
+        }
+    }
+}
+
+BuffSpell* Database::getABuffSpell(SpellInterface* spell)
+{
+    int id = spell->Id;
+
+    for (int i = 0; i < this->BuffSpells.size(); i++)
+    {
+        if (this->BuffSpells[i].Id = id)
+        {
+            return &(this->BuffSpells[i]);
         }
     }
 }
@@ -173,6 +194,8 @@ void Database::loadSpellsFromDatabase()
 
     SpellTypesEnum spellType;
 
+    BuffTypesEnum buffType;
+
     SupportBuffsEnum supportBuff;
 
     float multiplier;
@@ -208,6 +231,12 @@ void Database::loadSpellsFromDatabase()
         switch (spellType)
         {
         case BUFF:
+            multiplier = (float)sqlite3_column_double(statement, 7);
+
+            buffType = (BuffTypesEnum)sqlite3_column_int(statement, 6);
+
+            this->BuffSpells.emplace_back(id, name, description, rounds, buffType, multiplier);
+
             break;
         case DAMAGE:
             element = (ElementsEnum)sqlite3_column_int(statement, 8);

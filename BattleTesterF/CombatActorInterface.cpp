@@ -35,11 +35,11 @@ bool CombatActorInterface::isDead()
 
 void CombatActorInterface::calculateTotals()
 {
-	auto findBuff = [](BuffTypesEnum buff, std::vector<BuffSpell> buffs)
+	auto findBuff = [](BuffTypesEnum buff, std::vector<ActiveBuff> buffs)
 	{
-		for (BuffSpell& spell : buffs) {
-			if (spell.BuffType == buff) {
-				return spell.Multiplier;
+		for (ActiveBuff& spell : buffs) {
+			if (spell.Buff->BuffType == buff) {
+				return spell.Buff->Multiplier;
 			}
 		}
 
@@ -77,4 +77,9 @@ int CombatActorInterface::totalStatusFormula(int baseStatus, float multiplier, i
 
 	return (int)round((baseStatus + combatTypeBonus) * buffValue);
 }
-	
+
+CombatActorInterface::ActiveBuff::ActiveBuff(BuffSpell* buff, int remaningRounds)
+{
+	this->Buff = buff;
+	this->RemaningRounds = remaningRounds;
+}

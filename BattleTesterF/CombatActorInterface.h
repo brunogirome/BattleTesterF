@@ -26,6 +26,14 @@ private:
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, float buff);
 
 public:
+	class ActiveBuff {
+	public:
+		BuffSpell* Buff;
+		int RemaningRounds;
+
+		ActiveBuff(BuffSpell* buff, int remaningRounds);
+	};
+
 	CombatActorInterface(int id, std::string name, TypeOfActorEnum typeOfActor, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells);
 
 	// General Status
@@ -71,7 +79,7 @@ public:
 
 	std::vector<int> Spells;
 
-	std::vector<BuffSpell> ActiveBuffs;
+	std::vector<ActiveBuff> ActiveBuffs;
 
 	bool isDead();
 

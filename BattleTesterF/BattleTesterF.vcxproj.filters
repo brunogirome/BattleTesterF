@@ -134,6 +134,9 @@
     <ClInclude Include="BuffSpell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TypeOfActorEnum.h">
+      <Filter>Source Files\Enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
