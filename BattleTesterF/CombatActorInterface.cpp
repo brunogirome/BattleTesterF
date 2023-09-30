@@ -36,7 +36,7 @@ void CombatActorInterface::calculateTotals()
 {
 	auto findBuff = [](BuffTypesEnum buff, std::vector<BuffSpell> buffs)
 	{
-		for (BuffSpell spell : buffs) {
+		for (BuffSpell& spell : buffs) {
 			if (spell.BuffType == buff) {
 				return spell.Multiplier;
 			}

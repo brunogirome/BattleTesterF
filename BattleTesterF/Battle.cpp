@@ -187,32 +187,24 @@ void Battle::setNextState()
 
 void Battle::startingScreen()
 {
-	std::string battleStartHeader = "";
+	std::cout << "\n\n\n\n\n\n";
+	std::cout << "\t+-------------------------------------------+\n";
+	std::cout << "\t|                Battle Start!              |\n";
+	std::cout << "\t+-------------------------------------------+\n";
 
-	std::string auxHeroName, auxEnemyName, auxVersus, auxSeparator;
+	std::cout << "\t";
 
-	int enemyPartySize = (int)enemyParty.size(), partySize = (int)party.size();
-
-	int biggestParty = enemyPartySize >= partySize ? enemyPartySize : partySize;
-
-	battleStartHeader += "\n\n\n\n\n\n";
-	battleStartHeader += "\t+-------------------------------------------+\n";
-	battleStartHeader += "\t|                Battle Start!              |\n";
-	battleStartHeader += "\t+-------------------------------------------+\n";
-
-	for (int i = 0; i < biggestParty; i++) {
-		auxEnemyName = i < enemyPartySize ? "\t\t" + enemyParty[i].Name : "\t\t";
-
-		auxSeparator = auxEnemyName.length() > 8 ? "\t\t" : "\t\t\t";
-
-		auxVersus = i > 0 ? auxSeparator : "\t\t VS \t";
-
-		auxHeroName = i < partySize ? party[i]->Name : "";
-
-		battleStartHeader += auxEnemyName + auxVersus + auxHeroName + "\n\n";
+	for (Enemy& enemy : this->enemyParty) {
+		 std::cout << '[' << enemy.Name << ']' << ' ';
 	}
 
-	std::cout << battleStartHeader;
+	std::cout << "\n\n\t\t\tVS\n\n";
+
+	std::cout << "\t";
+
+	for (Hero* hero : this->party) {
+		std::cout << '[' << hero->Name << ']' << ' ';
+	}
 
 	std::this_thread::sleep_for(std::chrono::seconds(1));	
 }
