@@ -41,6 +41,10 @@ void Battle::start()
 				this->selectSpellScreen();
 
 				break;
+			case ACTOR_SELECTOR:
+				this->selectEnemyScreen();
+
+				break;
 			case SPELL_CASTING:
 				this->castSpellScreen();
 
@@ -309,7 +313,7 @@ void Battle::selectEnemyScreen()
 
 		std::string enemyName = currentEnemy->Name;
 
-		if (currentEnemy->HpCurrent <= 0) {
+		if (currentEnemy->isDead()) {
 			std::cout << enemyName << " is dead, select another enemy!";
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -321,6 +325,73 @@ void Battle::selectEnemyScreen()
 	}
 
 	this->battleState = castedSpell ? SPELL_CASTING : HERO_ATTACKING;
+}
+
+void Battle::selectActorScreen()
+{
+	std::vector<CombatActorInterface*> actors;
+
+	for (Hero* hero : party) {
+		actors.push_back(hero);
+	}
+
+	for (Enemy& enemy : enemyParty) {
+		actors.emplace_back(enemy);
+	}
+
+	int inputActorSelected;
+
+	bool validOption = false;
+
+	while (!validOption) {
+		system("cls");
+
+		this->printBattle();
+
+		FancyDialog("Select someone (0 cancel): ", 2);
+
+		for (int i = 0; i < actors.size(); i++) {
+			std::cout << '[' << (i + 1) << '] ' << actors[i]->Name << '\n';
+		}
+
+		std::cin >> inputActorSelected;
+
+		if (inputActorSelected == 0) {
+			this->battleState = SELECT_ACTION;
+
+			validOption = true;
+
+			return;
+		}
+
+		inputActorSelected -= 1;
+
+		if (inputActorSelected >= enemyParty.size() || inputActorSelected < 0) {
+			std::cout << "Invalid input!";
+
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+
+			continue;
+		}
+
+		CombatActorInterface* actor = actors[inputActorSelected];
+
+		std::string actorName = actor->Name;
+
+		if (actor->isDead()) {
+			std::cout << actorName << " is dead, select anyone else!";
+
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+
+			continue;
+		}
+
+		this->selectedBuffedActor = actor;
+
+		validOption = true;
+	}
+
+	this->battleState = SPELL_CASTING;
 }
 
 void Battle::heroAttackingScreen()
@@ -441,7 +512,21 @@ void Battle::selectSpellScreen()
 		validSpellOption = true;
 	}
 
-	this->battleState = this->selectedSpell->SpellType == DAMAGE ? ENEMY_SELECTION : SPELL_CASTING;
+	battleStateEnum newState;
+	
+	switch (this->selectedSpell->SpellType) {
+	case DAMAGE:
+		newState = ENEMY_SELECTION;
+		break;
+	case SUPPORT:
+		newState = SPELL_CASTING;
+		break;
+	case BUFF:
+		newState = ACTOR_SELECTOR;
+		break;
+	}
+
+	this->battleState = newState;
 }
 
 void Battle::castSpellScreen() 
@@ -667,7 +752,7 @@ Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
 	this->currentRound = 1;
 }
 
-Battle::actorAttackOrder::actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor, bool isDead)
+Battle::actorAttackOrder::actorAttackOrder(int position, int speed, TypeOfActorEnum typeOfActor, bool isDead)
 {
 	this->Position = position;
 	this->Speed = speed;

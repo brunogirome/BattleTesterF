@@ -1,9 +1,10 @@
 #include "CombatActorInterface.h"
 
-CombatActorInterface::CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells)
+CombatActorInterface::CombatActorInterface(int id, std::string name, TypeOfActorEnum typeOfActor, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells)
 {
 	this->Id = id;
 	this->Name = name;
+	this->TypeOfActor = typeOfActor;
 	this->CombatType = combatType;
 	this->Element = element;
 	this->Strength = strength;

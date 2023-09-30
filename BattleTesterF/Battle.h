@@ -6,9 +6,7 @@
 
 #include "FancyDialog.h"
 
-enum typeOfActorEnum { HERO, ENEMY };
-
-enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, HERO_ATTACKING, SPELL_SELECTION, SPELL_CASTING, ENEMY_TURN, DEFFENDING, ESCAPING, VICTORY, DEFEAT };
+enum battleStateEnum { STARTING, SELECT_ACTION, ENEMY_SELECTION, ACTOR_SELECTOR, HERO_ATTACKING, SPELL_SELECTION, SPELL_CASTING, ENEMY_TURN, DEFFENDING, ESCAPING, VICTORY, DEFEAT };
 
 class Battle
 {
@@ -25,9 +23,9 @@ private:
 		int Position;
 		int Speed;
 		bool IsDead;
-		typeOfActorEnum TypeOfActor;
+		TypeOfActorEnum TypeOfActor;
 
-		actorAttackOrder(int position, int speed, typeOfActorEnum typeOfActor, bool isDead);
+		actorAttackOrder(int position, int speed, TypeOfActorEnum typeOfActor, bool isDead);
 	};
 
 	class activeSupportBuff {
@@ -57,6 +55,8 @@ private:
 
 	Hero* currentHero;
 
+	CombatActorInterface* selectedBuffedActor;
+
 	SpellInterface* selectedSpell;
 	
 	battleStateEnum battleState;
@@ -70,6 +70,8 @@ private:
 	void selectActionScreen();
 
 	void selectEnemyScreen();
+
+	void selectActorScreen();
 
 	void heroAttackingScreen();
 

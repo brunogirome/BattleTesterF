@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "TypeOfActorEnum.h"
 #include "CombatTypesEnum.h"
 #include "ElementsEnum.h"
 
@@ -25,11 +26,12 @@ private:
 	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, float buff);
 
 public:
-	CombatActorInterface(int id, std::string name, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells);
+	CombatActorInterface(int id, std::string name, TypeOfActorEnum typeOfActor, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells);
 
 	// General Status
 	int Id;
 	std::string Name;
+	TypeOfActorEnum TypeOfActor;
 	CombatTypesEnum CombatType;
 	ElementsEnum Element;
 
