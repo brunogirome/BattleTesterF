@@ -33,6 +33,16 @@ bool CombatActorInterface::isDead()
 	return this->HpCurrent <= 0;
 }
 
+int CombatActorInterface::getOriginalHpTotal()
+{
+	return totalStatusFormula(this->HpBase, this->HP_MULTIPLIER, this->Strength, TYPE_STRENGTH);
+}
+
+int CombatActorInterface::getOriginalManaTotal()
+{
+	return totalStatusFormula(this->ManaBase, this->MANA_MULTIPLIER, this->Intelligence, TYPE_INTELLIGENCE);
+}
+
 void CombatActorInterface::calculateTotals()
 {
 	auto findBuff = [](BuffTypesEnum buff, std::vector<ActiveBuff> buffs)
@@ -82,4 +92,9 @@ CombatActorInterface::ActiveBuff::ActiveBuff(BuffSpell* buff, int remaningRounds
 {
 	this->Buff = buff;
 	this->RemaningRounds = remaningRounds;
+}
+
+bool CombatActorInterface::ActiveBuff::expired()
+{
+	return RemaningRounds < 1;
 }

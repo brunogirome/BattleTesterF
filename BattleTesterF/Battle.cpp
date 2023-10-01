@@ -4,8 +4,6 @@ void Battle::start()
 {
 	this->battleState = STARTING;
 
-	this->roundSize = this->party.size() + this->enemyParty.size();
-
 	this->currentAttackerPointer = 0;
 
 	while (true) {
@@ -30,11 +28,7 @@ void Battle::start()
 			case HERO_ATTACKING:
 				this->heroAttackingScreen();
 				
-				this->manageSupportBuffs();
-
-				this->currentAttackerPointer++;
-				
-				this->setNextState();
+				this->endOfTurn();
 
 				break;
 			case SPELL_SELECTION:
@@ -48,42 +42,26 @@ void Battle::start()
 			case SPELL_CASTING:
 				this->castSpellScreen();
 
-				this->manageSupportBuffs();
-
-				this->currentAttackerPointer++;
-
-				this->setNextState();
-
+				this->endOfTurn();
 				break;
 			case ENEMY_TURN:
 				this->currentEnemy = &(this->enemyParty[this->currentAttacker->Position]);
 
 				this->enemyTurnScreen();
 
-				this->manageSupportBuffs();
-
-				this->currentAttackerPointer++;
-
-				this->setNextState();
+				this->endOfTurn();
 
 				break;
 			case DEFFENDING:
 				this->deffendingScreen();
 
-				this->manageSupportBuffs();
-
-				this->currentAttackerPointer++;
-
-				this->setNextState();
+				this->endOfTurn();
 				break;
 			case ESCAPING:
 				this->escapingScreen();
 
-				this->manageSupportBuffs();
+				this->endOfTurn();
 
-				this->currentAttackerPointer++;
-
-				this->setNextState();
 				break;
 			case DEFEAT:
 				this->defeatScreen();
@@ -99,6 +77,167 @@ void Battle::start()
 				break;
 		}
 	}
+}
+
+void Battle::endOfTurn()
+{
+	// Mananing the support buffs of the battle
+	std::vector<int> supportBuffsToRemove;
+
+	for (int i = 0; i < this->activeSupportBuffs.size(); i++) {
+		activeSupportBuff* activeBuff = &(this->activeSupportBuffs[i]);
+
+		activeBuff->ReamaningRounds--;
+
+		if (activeBuff->expired()) {
+			supportBuffsToRemove.push_back(i);
+		}
+	}
+
+	for (int position : supportBuffsToRemove) {
+		std::string buffName;
+
+		switch (this->activeSupportBuffs[position].SupportBuff) {
+		case SIGHT:
+			buffName = "Sight";
+			break;
+		}
+
+		system("cls");
+
+		this->printBattle();
+
+		FancyDialog("\nThe buff " + buffName + " has expired...", 5);
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		this->activeSupportBuffs.erase(this->activeSupportBuffs.begin() + position);
+	}
+
+	// Removing actor buffs
+	for (Hero* hero : party) {
+		if (hero->isDead()) {
+			continue;
+		}
+
+		std::vector<int> buffsToRemove;
+
+		float hpMultiplier = 0.f, manaMultiplier = 0.f;
+
+		bool expiredHpBuff = false, expiredManaBuff = false;
+
+		for (int i = 0; i < hero->ActiveBuffs.size(); i++) {
+			CombatActorInterface::ActiveBuff* buff = &(hero->ActiveBuffs[i]);
+
+			buff->RemaningRounds--;
+
+			if (buff->expired()) {
+				buffsToRemove.push_back(i);
+
+				if (buff->Buff->BuffType == HP_BUFF) {
+					expiredHpBuff = true;
+
+					hpMultiplier = (float)hero->HpCurrent / (float)hero->HpTotal;
+				}
+				else if (buff->Buff->BuffType == MANA_BUFF) {
+					expiredManaBuff = true;
+
+					manaMultiplier = (float)hero->ManaCurrent / (float)hero->ManaTotal;
+				};
+			}
+		}
+
+		for (int position : buffsToRemove) {
+			hero->ActiveBuffs.erase(hero->ActiveBuffs.begin() + position);
+		}
+
+		hero->calculateTotals();
+
+		if (expiredHpBuff) {
+			int originalHp = hero->getOriginalHpTotal();
+
+			int newHp = (int)(originalHp * hpMultiplier);
+
+			newHp < 1 ? 1 : newHp;
+
+			hero->HpCurrent = newHp;
+		}
+
+		if (expiredManaBuff) {
+			int originalMana = hero->getOriginalManaTotal();
+
+			int newMana = (int)(originalMana * manaMultiplier);
+
+			newMana < 1 ? 1 : newMana;
+
+			hero->ManaCurrent = newMana;
+		}
+	}
+
+	// Removing enemy buffs
+	for (Enemy& enemy : enemyParty) {
+		if (enemy.isDead()) {
+			continue;
+		}
+
+		std::vector<int> buffsToRemove;
+
+		float hpMultiplier = 0.f, manaMultiplier = 0.f;
+
+		bool expiredHpBuff = false, expiredManaBuff = false;
+
+		for (int i = 0; i < enemy.ActiveBuffs.size(); i++) {
+			CombatActorInterface::ActiveBuff* buff = &(enemy.ActiveBuffs[i]);
+
+			buff->RemaningRounds--;
+
+			if (buff->expired()) {
+				buffsToRemove.push_back(i);
+
+				if (buff->Buff->BuffType == HP_BUFF) {
+					expiredHpBuff = true;
+
+					hpMultiplier = (float)enemy.HpCurrent / (float)enemy.HpTotal;
+				}
+				else if (buff->Buff->BuffType == MANA_BUFF) {
+					expiredManaBuff = true;
+
+					manaMultiplier = (float)enemy.ManaCurrent / (float)enemy.ManaTotal;
+				};	
+			}
+		}
+
+		for (int position : buffsToRemove) {
+			enemy.ActiveBuffs.erase(enemy.ActiveBuffs.begin() + position);
+		}
+
+		enemy.calculateTotals();
+
+		if (expiredHpBuff) {
+			int originalHp = enemy.getOriginalHpTotal();
+
+			int newHp = (int)(originalHp * hpMultiplier);
+
+			newHp < 1 ? 1 : newHp;
+
+			enemy.HpCurrent = newHp;
+		}
+
+		if (expiredManaBuff) {
+			int originalMana = enemy.getOriginalManaTotal();
+
+			int newMana = (int)(originalMana * manaMultiplier);
+
+			newMana < 1 ? 1 : newMana;
+
+			enemy.ManaCurrent = newMana;
+		}
+	}
+
+	// General turn maintenance
+	this->currentAttackerPointer++;
+
+	this->setNextState();
 }
 
 void Battle::setNextState()
@@ -366,7 +505,7 @@ void Battle::selectActorScreen()
 
 		inputActorSelected -= 1;
 
-		if (inputActorSelected >= enemyParty.size() || inputActorSelected < 0) {
+		if (inputActorSelected >= actors.size() || inputActorSelected < 0) {
 			std::cout << "Invalid input!";
 
 			std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -399,45 +538,6 @@ void Battle::heroAttackingScreen()
 	this->printBattle();
 
 	this->calculatePhysicalDamage(currentHero, currentEnemy);
-}
-
-void Battle::manageSupportBuffs() 
-{
-	std::vector<int> positionsToRemove;
-
-	for (int i = 0; i < this->activeSupportBuffs.size(); i++) {
-		activeSupportBuff* activeBuff = &(this->activeSupportBuffs[i]);
-
-		activeBuff->ReamaningRounds--;
-
-		if (activeBuff->expired()) {
-			positionsToRemove.push_back(i);
-		}
-	}
-
-	if (positionsToRemove.size() == 0) {
-		return;
-	}
-
-	for (int position : positionsToRemove) {
-		std::string buffName;
-
-		switch (this->activeSupportBuffs[position].SupportBuff) {
-		case SIGHT:
-			buffName = "Sight";
-			break;
-		}
-
-		system("cls");
-
-		this->printBattle();
-
-		FancyDialog("The buff " + buffName + " has expired...", 5);
-
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-
-		this->activeSupportBuffs.erase(this->activeSupportBuffs.begin() + position);
-	}
 }
 
 void Battle::calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor) {
@@ -544,7 +644,11 @@ void Battle::castSpellScreen()
 
 		for (CombatActorInterface::ActiveBuff& buff : buffedActor->ActiveBuffs) {
 			if (buff.Buff->BuffType == castedBuff->BuffType) {
-				buff.RemaningRounds+= castedBuff->Rounds;
+				buff.RemaningRounds+= castedBuff->Rounds + 1;
+
+				if (buff.Buff->Multiplier < castedBuff->Multiplier) {
+					buff.Buff = castedBuff;
+				}
 
 				alreadyBuffed = true;
 			}
@@ -559,15 +663,15 @@ void Battle::castSpellScreen()
 		std::this_thread::sleep_for(std::chrono::milliseconds(333));
 
 		if (!alreadyBuffed) {
-			buffedActor->ActiveBuffs.emplace_back(castedBuff, castedBuff->Rounds);
-		}
+			buffedActor->ActiveBuffs.emplace_back(castedBuff, castedBuff->Rounds + 1);
 
-		if (castedBuff->BuffType == HP_BUFF) {
-			buffedActor->HpCurrent *= (1 + castedBuff->Multiplier);
-		}
+			if (castedBuff->BuffType == HP_BUFF) {
+				buffedActor->HpCurrent *= (1 + castedBuff->Multiplier);
+			}
 
-		if (castedBuff->BuffType == MANA_BUFF) {
-			buffedActor->ManaCurrent *= (1 + castedBuff->Multiplier);
+			if (castedBuff->BuffType == MANA_BUFF) {
+				buffedActor->ManaCurrent *= (1 + castedBuff->Multiplier);
+			}
 		}
 
 		buffedActor->calculateTotals();
@@ -634,7 +738,7 @@ void Battle::castSpellScreen()
 		}
 
 		// If not, add it to the acrtiveSupportBuffs vector
-		activeSupportBuffs.emplace_back(spell->SupportBuff, spell->Rounds + 1);
+		this->activeSupportBuffs.emplace_back(spell->SupportBuff, spell->Rounds + 1);
 
 		break;
 	}
@@ -687,6 +791,8 @@ void Battle::printBattle()
 				sightActive = true;
 			}
 		}
+
+		sightActive = true;
 
 		if (enemy->isDead()) {
 			std::cout << " DEAD" << '\n';
@@ -786,6 +892,8 @@ Battle::Battle(Game* game, std::vector<int> enemyPartyIds)
 	}
 
 	this->currentRound = 1;
+
+	this->roundSize = this->party.size() + this->enemyParty.size();
 }
 
 Battle::actorAttackOrder::actorAttackOrder(int position, int speed, TypeOfActorEnum typeOfActor, bool isDead)

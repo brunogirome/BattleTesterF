@@ -23,7 +23,7 @@ private:
 	const float MEELE_DEFENSE_MULTIPLIER = 0.5f;
 	const float MAGIC_DEFENSE_MULTIPLIER = 0.5f;
 
-	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, float buff);
+	int totalStatusFormula(int baseStatus, float multiplier, int combatStatusValue, CombatTypesEnum combatStatusBonus, float buff = 0.f);
 
 public:
 	class ActiveBuff {
@@ -32,6 +32,8 @@ public:
 		int RemaningRounds;
 
 		ActiveBuff(BuffSpell* buff, int remaningRounds);
+
+		bool expired();
 	};
 
 	CombatActorInterface(int id, std::string name, TypeOfActorEnum typeOfActor, CombatTypesEnum combatType, ElementsEnum element, int strength, int agility, int intelligence, int hpBase, int manaBase, int speedBase, int evasionBase, int staminaBase, int meelePowerBase, int magicPowerBase, int meeleDefenseBase, int magicDefenseBase, std::vector<int> spells);
@@ -82,6 +84,10 @@ public:
 	std::vector<ActiveBuff> ActiveBuffs;
 
 	bool isDead();
+
+	int getOriginalHpTotal();
+
+	int getOriginalManaTotal();
 
 	void calculateTotals();
 };

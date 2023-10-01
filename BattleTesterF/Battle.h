@@ -40,15 +40,17 @@ private:
 
 	std::vector<activeSupportBuff> activeSupportBuffs;
 
-	void manageSupportBuffs();
-
 	std::size_t currentAttackerPointer;
 
 	std::size_t roundSize;
 
+	int currentRound;
+
 	std::vector<actorAttackOrder> attackOrder;
 
 	actorAttackOrder* currentAttacker;
+
+	void endOfTurn();
 
 	// Battle State management/screens
 	Enemy* currentEnemy;
@@ -92,7 +94,6 @@ private:
 	// Utils
 	void calculatePhysicalDamage(CombatActorInterface* attackerActor, CombatActorInterface* deffenderActor);
 
-	int currentRound;
 
 	// Aux render functions
 	void printBattle();
